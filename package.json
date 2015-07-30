@@ -1,0 +1,33 @@
+{
+  "main": "client/views/index.html",
+  "name": "NeighborhoodMap",
+  "description": "Save your fun places!",
+  "keywords": [
+    "Maps"],
+  "node-main": "server/server.js"  ,
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server/app.js"
+  },
+  "dependencies": {
+    "express": "3.4.8",
+    "connect" : "2.x",
+    "ejs": "*",
+    "request": "*",
+    "archiver": "*",
+    "gulp":"*",
+    "gulp-concat": "*",
+    "gulp-rename": "*",
+    "gulp-uglify": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-connect": "*"
+  },
+  "webkit": {
+    "plugin": true
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  }
+}

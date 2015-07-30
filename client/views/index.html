@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <input id="loc" data-bind='value: locationLat' type="text">
+    <button data-bind='click: mapSearch'>Add Marker</button>
+    <button data-bind='click: toggleMarkers'>Toggle Markers</button>
+    <input id="searchCrit">
+    <button data-bind='click: toggleMarkersForSearch'>Toggle Markers</button>
+    <h3>All Locations(<span data-bind="text: markers().length"> </span>)</h3>
+    <ul data-bind="foreach: markers">
+        <li data-bind="visible: isVisible">
+            <label>
+                <span data-bind="text: title"> </span>
+            </label>
+        </li>
+    </ul>
+    <h3>Visible Locations(<span data-bind="text: filteredMarkers().length"> </span>)</h3>
+    <ul data-bind="foreach: filteredMarkers">
+        <li data-bind="text: title"></li>
+    </ul>
+    <div id="mapDiv" data-bind="style:{width:'100%',height:'500px'},map:centerMap"></div>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="../dist/knockout.min.js"></script>
+    <script src="../dist/utility.js"></script>
+    <script src="../dist/navview.js"></script>
+</body>
+
+</html>
