@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Neighborhood Map</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../css/style.css" rel="stylesheet"/>
 </head>
 <body>
     <div class="container">
@@ -26,7 +27,7 @@
 
                     <form class="navbar-form navbar-left" role="search">
                         <div class="form-group">
-                            <input data-bind='value: locationLat' type="text" class="form-control" placeholder="Search">
+                            <input data-bind='value: locationLat' type="text" class="form-control" placeholder="Enter Location">
                         </div>
                         <button data-bind='click: addMarkerOnMap' class="btn btn-default">Submit</button>
                     </form>
