@@ -63,6 +63,8 @@ $(function(){
      *
      * Represents the Marker
      * Allows creation of the Marker
+     * Also provides an observable to toggle the visibility of the Marker
+     * Allows adding a InfoWindow on the Marker
      */
     var Marker = function(placeData, map) {
         var googleMarker;
@@ -104,7 +106,16 @@ $(function(){
         self.isVisible(true);
     };
 
-    function MapViewModel() {
+    /**
+     *
+     * @constructor
+     * -- The boostrap point for KnockoutJS, it provides bindings needed to display Maps, Markers
+     * and location list.
+     * -- Maintains a list of current markers on the Map
+     * -- Implements operations needed for toggling and searching Markers
+     *
+     */
+    function NeighborhoodViewModel() {
         var self = this;
 
         ko.bindingHandlers.mapBinder = {
@@ -164,5 +175,5 @@ $(function(){
         self.titleSearch.subscribe(self.toggleMarkersForSearch);
     }
 
-    ko.applyBindings(MapViewModel);
+    ko.applyBindings(NeighborhoodViewModel);
 });
