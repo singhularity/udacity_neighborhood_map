@@ -3,7 +3,12 @@
  */
 
 $(function(){
-
+    /**
+     *
+     * @param propName Name of the property on which we want to filter the array
+     * @param matchValue Value of the filter
+     * @returns An array of elements matching the filter
+     */
     ko.observableArray.fn.filterByProperty = function(propName, matchValue) {
         return ko.pureComputed(function() {
             var allItems = this(), matchingItems = [];
@@ -16,6 +21,13 @@ $(function(){
         }, this);
     };
 
+    /**
+     *
+     * @type {{setMap: Function, getMap: Function, getSearchService: Function, getMapCenter: Function}}
+     * Represents the Map on the page
+     * -- Creates a new Map
+     * -- Provides a search service for the Map
+     */
     var Map = {
         setMap: function(valueAccessor, element)
         {
@@ -43,6 +55,15 @@ $(function(){
         }
     };
 
+    /**
+     *
+     * @param placeData
+     * @param map
+     * @constructor
+     *
+     * Represents the Marker
+     * Allows creation of the Marker
+     */
     var Marker = function(placeData, map) {
         var googleMarker;
         var lat = placeData.geometry.location.lat();  // latitude from the place service
@@ -51,19 +72,32 @@ $(function(){
         var self = this;
         self.title = ko.observable(name);
 
-        googleMarker = new google.maps.Marker({
+        self.googleMarker = new google.maps.Marker({
             position: new google.maps.LatLng(lat, lon),
             animation: google.maps.Animation.DROP,
             map: map
         });
 
+        self.setInfoWindow = function (content) {
+            // infoWindows are the little helper windows that open when you click
+            // or hover over a pin on a map. They usually contain more information
+            // about a location.
+            var infoWindow = new google.maps.InfoWindow({
+                content: self.title()
+            });
+
+            google.maps.event.addListener(self.googleMarker, 'click', function() {
+                infoWindow.open(map,self.googleMarker);
+            });
+        };
+
         self.isVisible = ko.observable(false);
 
         self.isVisible.subscribe(function (visibility) {
             if (visibility) {
-                googleMarker.setMap(map)
+                self.googleMarker.setMap(map)
             } else {
-                googleMarker.setMap(null);
+                self.googleMarker.setMap(null);
             }
         });
 
@@ -94,8 +128,10 @@ $(function(){
 
         function addMarkerCallback(results, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
-                var pin = new Marker(results[0], Map.getMap());
-                self.markers.push(pin);
+                var currentMap = Map.getMap();
+                var newMarker = new Marker(results[0], currentMap);
+                newMarker.setInfoWindow(newMarker.title);
+                self.markers.push(newMarker);
             }
         }
 

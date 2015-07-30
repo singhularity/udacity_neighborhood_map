@@ -17,10 +17,6 @@
             </label>
         </li>
     </ul>
-    <h3>Visible Locations(<span data-bind="text: filteredMarkers().length"> </span>)</h3>
-    <ul data-bind="foreach: filteredMarkers">
-        <li data-bind="text: title"></li>
-    </ul>
     <div id="mapDiv" data-bind="style:{width:'100%',height:'500px'},mapBinder:centerMap"></div>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
