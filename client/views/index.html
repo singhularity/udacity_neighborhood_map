@@ -6,10 +6,9 @@
 </head>
 <body>
     <input id="loc" data-bind='value: locationLat' type="text">
-    <button data-bind='click: mapSearch'>Add Marker</button>
-    <button data-bind='click: toggleMarkers'>Toggle Markers</button>
-    <input id="searchCrit">
-    <button data-bind='click: toggleMarkersForSearch'>Toggle Markers</button>
+    <button data-bind='click: addMarkerOnMap'>Add Marker</button>
+    <button data-bind='click: toggleAllMarkers'>Toggle Markers</button>
+    <input id="searchCrit" data-bind="value: titleSearch, valueUpdate: 'keyup'">
     <h3>All Locations(<span data-bind="text: markers().length"> </span>)</h3>
     <ul data-bind="foreach: markers">
         <li data-bind="visible: isVisible">
@@ -22,7 +21,7 @@
     <ul data-bind="foreach: filteredMarkers">
         <li data-bind="text: title"></li>
     </ul>
-    <div id="mapDiv" data-bind="style:{width:'100%',height:'500px'},map:centerMap"></div>
+    <div id="mapDiv" data-bind="style:{width:'100%',height:'500px'},mapBinder:centerMap"></div>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="../dist/knockout.min.js"></script>
