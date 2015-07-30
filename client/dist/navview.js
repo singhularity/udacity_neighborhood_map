@@ -1,5 +1,7 @@
 /**
  * Created by ssingh on 7/29/15.
+ * Provides objects for Map and Map-markers
+ * Implements the operations for adding Map, Map-markers and also for searching markers.
  */
 
 $(function(){
