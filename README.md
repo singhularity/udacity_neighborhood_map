@@ -41,3 +41,5 @@ This is a nodejs application which can be run as follows
     2. I added functions which represent a Map, Marker and finally one that provides all the bindings through Knockout.
     3. For detailed code structure and implementation details, please see code comments.
     
+<b>Optimizations</b>
+Added optimizations to the application so the pagespeed scores look good.
