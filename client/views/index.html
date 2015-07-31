@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Neighborhood Map</title>
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.teal-red.min.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="../css/style.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -115,11 +112,44 @@
         </main>
     </div>
 </div>
+<script>
+    var cb = function() {
+        var l = document.createElement('link'); l.rel = 'stylesheet';
+        l.href = 'https://storage.googleapis.com/code.getmdl.io/1.0.2/material.teal-red.min.css';
+        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+    };
+    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+            webkitRequestAnimationFrame || msRequestAnimationFrame;
+    if (raf) raf(cb);
+    else window.addEventListener('load', cb);
+</script>
+<script>
+    var cb = function() {
+        var l = document.createElement('link'); l.rel = 'stylesheet';
+        l.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
+        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+    };
+    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+            webkitRequestAnimationFrame || msRequestAnimationFrame;
+    if (raf) raf(cb);
+    else window.addEventListener('load', cb);
+</script>
+<script>
+    var cb = function() {
+        var l = document.createElement('link'); l.rel = 'stylesheet';
+        l.href = '../css/style.css';
+        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+    };
+    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+            webkitRequestAnimationFrame || msRequestAnimationFrame;
+    if (raf) raf(cb);
+    else window.addEventListener('load', cb);
+</script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
-<script src="../dist/knockout.min.js"></script>
-<script src="../dist/all.min.js"></script>
+<script async type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script async src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
+<script async src="../dist/knockout.min.js"></script>
+<script async src="../dist/all.min.js"></script>
 </body>
 
 </html>
