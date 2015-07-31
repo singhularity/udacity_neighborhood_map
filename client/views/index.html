@@ -82,13 +82,27 @@
             <section class="mdl-layout__tab-panel" id="fixed-tab-2">
                 <div class="page-content">
                     <!--<h3>All Locations(<span data-bind="text: markers().length"> </span>)</h3>-->
-                    <ul data-bind="foreach: markers">
-                        <li data-bind="visible: isVisible">
-                            <label>
-                                <span data-bind="text: title"> </span>
-                            </label>
-                        </li>
-                    </ul>
+                    <div data-bind="foreach: markers">
+                    <div class="demo-grid-1 mdl-grid" data-bind="visible: isVisible">
+                        <div class="mdl-cell mdl-cell--2-col" ></div>
+                        <div class="mdl-cell mdl-cell--8-col" >
+                            <div style="width: 100%" class="mdl-card mdl-shadow--2dp">
+                                <div class="mdl-card__title">
+                                    <h2 data-bind="text: title" class="mdl-card__title-text"></h2>
+                                </div>
+                                <div class="mdl-card__actions mdl-card--border">
+                                <div data-bind="text: content" class="mdl-card__supporting-text">
+                                </div>
+                                <div class="mdl-card__actions mdl-card--border">
+                                    <a class="mdl-button mdl-button--colored mdl-js-button" target="_blank" data-bind="attr:{href: infolink, details: title}">
+                                        More Info
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--2-col" ></div>
+                    </div>
+                    </div>
                 </div>
             </section>
             <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">

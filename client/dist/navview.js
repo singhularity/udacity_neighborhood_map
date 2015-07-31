@@ -75,6 +75,21 @@ var Marker = function(placeData, map) {
     var self = this;
     self.title = ko.observable(title);
     self.name = placeData.name;
+    self.content = ko.observable("");
+    self.infolink = ko.observable("https://en.wikipedia.org/wiki/" + self.name);
+
+    $.ajax({
+
+        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + self.name,
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'jsonp',
+        success: function(data) {
+            var key = Object.keys(data.query.pages)[0];
+            self.content($($(data.query.pages[key].extract)[0].innerHTML).text());
+        },
+        error: function() { alert('Failed!'); },
+    });
 
     self.googleMarker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, lon),
@@ -91,20 +106,8 @@ var Marker = function(placeData, map) {
         });
 
         google.maps.event.addListener(self.googleMarker, 'click', function() {
-            $.ajax({
-
-                url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + self.name,
-                type: 'GET',
-                crossDomain: true,
-                dataType: 'jsonp',
-                success: function(data) {
-                    var key = Object.keys(data.query.pages)[0];
-                    infoWindow.content = $(data.query.pages[key].extract)[0].innerHTML;
-                    infoWindow.open(map,self.googleMarker);
-                },
-                error: function() { alert('Failed!'); },
-            });
-
+            infoWindow.content = self.content();
+            infoWindow.open(map,self.googleMarker);
         });
     };
 
@@ -188,14 +191,6 @@ function NeighborhoodViewModel() {
         else
             self.markerToggler("");
     });
-
-    //self.toggleAllMarkers = function() {
-    //    self.toggle(!this.toggle());
-    //    if(!self.toggle())
-    //        self.markerToggler(null);
-    //    else
-    //        self.markerToggler("");
-    //};
 
     this.toggleMarkersForSearch = function(value) {
         var text = new RegExp(value, 'i');
