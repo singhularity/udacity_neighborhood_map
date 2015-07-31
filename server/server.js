@@ -1,7 +1,6 @@
 /**
  * Created by ssingh on 7/29/15.
  */
-
 var express = require('express');
 var connect = require('connect');
 var path = require('path');
@@ -27,10 +26,10 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
     res.sendfile('client/views/index.views');
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
 });
