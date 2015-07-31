@@ -83,13 +83,14 @@ var Marker = function(placeData, map) {
     var lon = placeData.geometry.location.lng(); // longitude from the place service
     var title = placeData.formatted_address; // name of the place from the place service
     var self = this;
+    self.icon = placeData.icon;
     self.title = ko.observable(title);
     self.name = placeData.name;
     self.content = ko.observable("");
     self.infolink = ko.observable("https://en.wikipedia.org/wiki/" + self.name);
+
     //Get data to be displayed on InfoWindow and in location cards
     $.ajax({
-
         url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + self.name,
         type: 'GET',
         crossDomain: true,
@@ -107,6 +108,7 @@ var Marker = function(placeData, map) {
     self.googleMarker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, lon),
         animation: google.maps.Animation.DROP,
+        icon: self.icon,
         map: map
     });
 
