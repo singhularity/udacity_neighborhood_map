@@ -190,6 +190,7 @@ function NeighborhoodViewModel() {
             var newMarker = new Marker(results[0], currentMap);
             newMarker.setInfoWindow(newMarker.title);
             self.markers.push(newMarker);
+            self.visibleMarkersCount(self.visibleMarkersCount()+1);
             self.locationLat("")
         }
     }
@@ -198,12 +199,21 @@ function NeighborhoodViewModel() {
     self.titleSearch = ko.observable("");
 
     self.filteredMarkers = this.markers.filterByProperty("visible", true);
+    self.visibleMarkersCount = ko.observable(0);
+
+    //Keep track when there are no cards being displayed in the list
+    self.showDummyCard = ko.computed(function(){
+        return self.visibleMarkersCount() == 0 && self.toggle;
+    });
 
     //Main function controlling the visibility of specific markers
     self.markerToggler = function(text) {
+        self.visibleMarkersCount(0);
         for (var marker in self.markers()) {
             var markerObj = self.markers()[marker];
             markerObj.isVisible(markerObj.title().match(text) != null);
+            if (markerObj.isVisible())
+                self.visibleMarkersCount(self.visibleMarkersCount() + 1);
         }
     };
 

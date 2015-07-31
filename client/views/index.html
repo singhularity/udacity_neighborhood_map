@@ -78,6 +78,15 @@
         <main class="mdl-layout__content">
             <section class="mdl-layout__tab-panel" id="fixed-tab-2">
                 <div class="page-content">
+                    <div class="demo-grid-1 mdl-grid" data-bind="visible: showDummyCard">
+                        <div class="mdl-cell mdl-cell--2-col"></div>
+                        <div class="mdl-cell mdl-cell--8-col">
+                                <div class="mdl-card__title" >
+                                    <h2 class="mdl-card__title-text">No Locations to show!</h2>
+                                </div>
+                            <div class="mdl-cell mdl-cell--2-col"></div>
+                        </div>
+                    </div>
                     <!--<h3>All Locations(<span data-bind="text: markers().length"> </span>)</h3>-->
                     <div data-bind="foreach: markers">
                         <div class="demo-grid-1 mdl-grid" data-bind="visible: isVisible">
