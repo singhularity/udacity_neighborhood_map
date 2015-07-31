@@ -1,4 +1,4 @@
-NeighborhoodMap
+<b>NeighborhoodMap</b>
 
 The webpage is divided into two tabs
 
@@ -11,7 +11,7 @@ The webpage is divided into two tabs
 7. Map markers can be searched and filtered using the search field in the navigation bar or drawer.
 8. Map markers can be toggled on and off using a toggle in the drawer or navigation bar
 
-How to run the application?
+<b>How to run the application?</b>
 
 The application can be run just by opening the index.html file OR more correctly as follows...
 
@@ -23,7 +23,7 @@ This is a nodejs application which can be run as follows
 3. run "node server/server.js"
 4. Access the application at "http://localhost:3010"
 
-Building the application
+<b>Building the application</b>
 
 1. The application includes a gulp file which can be run through the npm gulp module.
   1.1 If you do not have gulp installed, follow this link
@@ -33,7 +33,7 @@ Building the application
 3. It also watches changes to the "server/source/js/" folder to pick up changes and automatically provide 
     these to the client
     
-How the application was built?
+<b>How the application was built and structured?</b>
 
 1. I used Google's material design lite library for responsiveness and some smashing good material look :-)
 2. The javascript code is structured as follows
