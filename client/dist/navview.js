@@ -158,6 +158,7 @@ function NeighborhoodViewModel() {
             var newMarker = new Marker(results[0], currentMap);
             newMarker.setInfoWindow(newMarker.title);
             self.markers.push(newMarker);
+            self.locationLat("")
         }
     }
 
