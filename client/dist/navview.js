@@ -37,7 +37,7 @@ var Map = {
             ko.utils.unwrapObservable(mapObj.lat),
             ko.utils.unwrapObservable(mapObj.lng));
 
-        var options = { center: latLng,zoom: 5};
+        var options = { center: latLng,zoom: 13};
         this.map = new google.maps.Map(element, options);
         window.mapBounds = new google.maps.LatLngBounds();
         this.searchService = new google.maps.places.PlacesService(this.map);
@@ -50,8 +50,8 @@ var Map = {
     },
     getMapCenter: function() {
         return {
-            lat: ko.observable(55),
-            lng: ko.observable(11)
+            lat: ko.observable(40.7127),
+            lng: ko.observable(-74.0059)
         }
     }
 };
@@ -119,6 +119,12 @@ var Marker = function(placeData, map) {
     });
 
     self.isVisible(true);
+    var bounds = window.mapBounds;
+    bounds.extend(new google.maps.LatLng(lat, lon));
+    // fit the map to the new marker
+    map.fitBounds(bounds);
+    // center the map
+    map.setCenter(bounds.getCenter());
 };
 
 /**
@@ -175,13 +181,21 @@ function NeighborhoodViewModel() {
         }
     };
 
-    self.toggleAllMarkers = function() {
-        self.toggle(!this.toggle());
-        if(!self.toggle())
+    this.toggle.subscribe(function(newValue){
+
+        if(!newValue)
             self.markerToggler(null);
         else
             self.markerToggler("");
-    };
+    });
+
+    //self.toggleAllMarkers = function() {
+    //    self.toggle(!this.toggle());
+    //    if(!self.toggle())
+    //        self.markerToggler(null);
+    //    else
+    //        self.markerToggler("");
+    //};
 
     this.toggleMarkersForSearch = function(value) {
         var text = new RegExp(value, 'i');
