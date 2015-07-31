@@ -81,13 +81,13 @@
                     <div class="demo-grid-1 mdl-grid" data-bind="visible: showDummyCard">
                         <div class="mdl-cell mdl-cell--2-col"></div>
                         <div class="mdl-cell mdl-cell--8-col">
-                                <div class="mdl-card__title" >
-                                    <h2 class="mdl-card__title-text">No Locations to show!</h2>
-                                </div>
+                            <div class="mdl-card__title">
+                                <h2 class="mdl-card__title-text">No Locations to show!</h2>
+                            </div>
                             <div class="mdl-cell mdl-cell--2-col"></div>
                         </div>
                     </div>
-                    <!--<h3>All Locations(<span data-bind="text: markers().length"> </span>)</h3>-->
+                    <!--<h3>All Locations(<span data-bind="text: markers().length"></span>)</h3>-->
                     <div data-bind="foreach: markers">
                         <div class="demo-grid-1 mdl-grid" data-bind="visible: isVisible">
                             <div class="mdl-cell mdl-cell--2-col"></div>
@@ -97,8 +97,7 @@
                                         <h2 data-bind="text: title" class="mdl-card__title-text"></h2>
                                     </div>
                                     <div class="mdl-card__actions mdl-card--border">
-                                        <div data-bind="text: content" class="mdl-card__supporting-text">
-                                        </div>
+                                        <div data-bind="text: content" class="mdl-card__supporting-text"></div>
                                         <div class="mdl-card__actions mdl-card--border">
                                             <a class="mdl-button mdl-button--colored mdl-js-button" target="_blank" data-bind="attr:{href: infolink, details: title}">
                                                 More Info
@@ -114,8 +113,7 @@
             </section>
             <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
                 <div class="page-content">
-                    <div id="mapDiv" data-bind="style: mapDimensions,mapBinder:centerMap">
-                    </div>
+                    <div id="mapDiv" data-bind="style: mapDimensions,mapBinder:centerMap"></div>
                 </div>
             </section>
         </main>
@@ -123,9 +121,11 @@
 </div>
 <script>
     var cb = function() {
-        var l = document.createElement('link'); l.rel = 'stylesheet';
+        var l = document.createElement('link');
+        l.rel = 'stylesheet';
         l.href = 'https://storage.googleapis.com/code.getmdl.io/1.0.2/material.teal-red.min.css';
-        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+        var h = document.getElementsByTagName('head')[0];
+        h.parentNode.insertBefore(l, h);
     };
     var raf = requestAnimationFrame || mozRequestAnimationFrame ||
             webkitRequestAnimationFrame || msRequestAnimationFrame;
@@ -134,9 +134,11 @@
 </script>
 <script>
     var cb = function() {
-        var l = document.createElement('link'); l.rel = 'stylesheet';
+        var l = document.createElement('link');
+        l.rel = 'stylesheet';
         l.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
-        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+        var h = document.getElementsByTagName('head')[0];
+        h.parentNode.insertBefore(l, h);
     };
     var raf = requestAnimationFrame || mozRequestAnimationFrame ||
             webkitRequestAnimationFrame || msRequestAnimationFrame;
@@ -145,9 +147,11 @@
 </script>
 <script>
     var cb = function() {
-        var l = document.createElement('link'); l.rel = 'stylesheet';
+        var l = document.createElement('link');
+        l.rel = 'stylesheet';
         l.href = '../css/style.css';
-        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+        var h = document.getElementsByTagName('head')[0];
+        h.parentNode.insertBefore(l, h);
     };
     var raf = requestAnimationFrame || mozRequestAnimationFrame ||
             webkitRequestAnimationFrame || msRequestAnimationFrame;

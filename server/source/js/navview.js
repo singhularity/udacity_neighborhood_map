@@ -3,7 +3,6 @@
  * Provides objects for Map and Map-markers
  * Implements the operations for adding Map, Map-markers and also for searching markers.
  */
-
 /**
  *
  * @param propName Name of the property on which we want to filter the array
@@ -60,8 +59,8 @@ var Map = {
     },
     getMapDimensions: function() {
         return {
-            width:'100%',
-            height:'500px'
+            width: '100%',
+            height: '500px'
         }
     }
 };
@@ -190,7 +189,7 @@ function NeighborhoodViewModel() {
             var newMarker = new Marker(results[0], currentMap);
             newMarker.setInfoWindow(newMarker.title);
             self.markers.push(newMarker);
-            self.visibleMarkersCount(self.visibleMarkersCount()+1);
+            self.visibleMarkersCount(self.visibleMarkersCount() + 1);
             self.locationLat("")
         }
     }
@@ -202,7 +201,7 @@ function NeighborhoodViewModel() {
     self.visibleMarkersCount = ko.observable(0);
 
     //Keep track when there are no cards being displayed in the list
-    self.showDummyCard = ko.computed(function(){
+    self.showDummyCard = ko.computed(function() {
         return self.visibleMarkersCount() == 0 && self.toggle;
     });
 
