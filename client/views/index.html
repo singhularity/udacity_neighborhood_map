@@ -83,7 +83,7 @@
                         <div class="demo-grid-1 mdl-grid" data-bind="visible: isVisible">
                             <div class="mdl-cell mdl-cell--2-col"></div>
                             <div class="mdl-cell mdl-cell--8-col">
-                                <div style="width: 100%" class="mdl-card mdl-shadow--2dp">
+                                <div class="mdl-card mdl-shadow--2dp wideCard">
                                     <div class="mdl-card__title">
                                         <h2 data-bind="text: title" class="mdl-card__title-text"></h2>
                                     </div>
@@ -105,7 +105,7 @@
             </section>
             <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
                 <div class="page-content">
-                    <div id="mapDiv" data-bind="style:{width:'100%',height:'500px'},mapBinder:centerMap">
+                    <div id="mapDiv" data-bind="style: mapDimensions,mapBinder:centerMap">
                     </div>
                 </div>
             </section>

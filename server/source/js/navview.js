@@ -57,6 +57,12 @@ var Map = {
             lat: ko.observable(40.7127),
             lng: ko.observable(-74.0059)
         }
+    },
+    getMapDimensions: function() {
+        return {
+            width:'100%',
+            height:'500px'
+        }
     }
 };
 
@@ -161,6 +167,7 @@ function NeighborhoodViewModel() {
     };
 
     self.centerMap = ko.observable(Map.getMapCenter());
+    self.mapDimensions = ko.observable(Map.getMapDimensions());
 
     self.markers = ko.observableArray([]);
     self.locationLat = ko.observable("");

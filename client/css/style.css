@@ -1,5 +1,7 @@
-.centeredButton{
+.centeredButton {
     margin:0 auto;
     display:block;
 }
-
+.wideCard {
+    width: 100%;
+}
