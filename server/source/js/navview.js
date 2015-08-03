@@ -45,6 +45,9 @@ var Map = {
 
         window.mapBounds = new google.maps.LatLngBounds();
         this.searchService = new google.maps.places.PlacesService(this.map);
+        this.infoWindow = new google.maps.InfoWindow({
+            content: ""
+        });
     },
     getMap: function() {
         return this.map;
@@ -64,6 +67,9 @@ var Map = {
             width: '100%',
             height: "" + aHeight + "px"
         };
+    },
+    getInfoWindow: function() {
+        return this.infoWindow;
     }
 };
 
@@ -79,7 +85,6 @@ var Map = {
  * Allows adding a InfoWindow on the Marker
  */
 var Marker = function(placeData, map) {
-    var googleMarker;
     var lat = placeData.geometry.location.lat(); // latitude from the place service
     var lon = placeData.geometry.location.lng(); // longitude from the place service
     var title = placeData.formatted_address; // name of the place from the place service
@@ -125,12 +130,9 @@ var Marker = function(placeData, map) {
         // infoWindows are the little helper windows that open when you click
         // or hover over a pin on a map. They usually contain more information
         // about a location.
-        var infoWindow = new google.maps.InfoWindow({
-            content: self.title()
-        });
-
         google.maps.event.addListener(self.googleMarker, 'click', function() {
-            infoWindow.content = self.content();
+            infoWindow = Map.getInfoWindow();
+            infoWindow.setContent(self.content());
             infoWindow.open(map, self.googleMarker);
         });
     };
