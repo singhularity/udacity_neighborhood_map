@@ -42,6 +42,7 @@ var Map = {
             zoom: 13
         };
         this.map = new google.maps.Map(element, options);
+
         window.mapBounds = new google.maps.LatLngBounds();
         this.searchService = new google.maps.places.PlacesService(this.map);
     },
@@ -58,10 +59,11 @@ var Map = {
         }
     },
     getMapDimensions: function() {
+        var aHeight = $('main').height() + 40;
         return {
             width: '100%',
-            height: '500px'
-        }
+            height: "" + aHeight + "px"
+        };
     }
 };
 
@@ -95,12 +97,19 @@ var Marker = function(placeData, map) {
         crossDomain: true,
         dataType: 'jsonp',
         success: function(data) {
-            var key = Object.keys(data.query.pages)[0];
-            self.content($($(data.query.pages[key].extract)[0].innerHTML).text());
+            try {
+                var key = Object.keys(data.query.pages)[0];
+                self.content($($(data.query.pages[key].extract)[0].innerHTML).text());
+            }
+            catch(error){
+                console.log("Failed to parse content about location : " + self.name);
+                self.content('Could not get additional information.');
+            }
         },
         error: function() {
-            alert('Failed!');
-        },
+            console.log("Failed to parse content about location : " + self.name);
+            self.content('Could not get additional information.');
+        }
     });
 
     //Create the Marker to be put on map here
@@ -236,3 +245,8 @@ function NeighborhoodViewModel() {
 
 //Apply Knockout bindings
 ko.applyBindings(NeighborhoodViewModel);
+
+//Add a resize event to automatically resize map when window is resized.
+$( window ).resize(function() {
+    google.maps.event.trigger(Map.getMap(), 'resize');
+});

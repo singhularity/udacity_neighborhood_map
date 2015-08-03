@@ -1,7 +1,15 @@
+html,body {
+    height:100%;
+}
+
 .centeredButton {
-    margin:0 auto;
-    display:block;
+    margin: 0 auto;
+    display: block;
 }
 .wideCard {
     width: 100%;
+}
+
+.mapContent {
+    padding-top: 0;
 }

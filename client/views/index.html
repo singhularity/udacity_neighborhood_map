@@ -10,7 +10,7 @@
 <body>
 <div class="mdl-layout__container">
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
-        <header class="mdl-layout__header">
+        <header class="mdl-layout__header" id="headerTabs">
             <div class="mdl-layout__header-row">
                 <!-- Title -->
                 <span class="mdl-layout-title">NeighborhoodMap</span>
@@ -113,7 +113,9 @@
             </section>
             <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
                 <div class="page-content">
-                    <div id="mapDiv" data-bind="style: mapDimensions,mapBinder:centerMap"></div>
+                    <div class="demo-grid-1 mdl-grid mapContent">
+                        <div id="mapDiv" data-bind="style: mapDimensions,mapBinder:centerMap"></div>
+                    </div>
                 </div>
             </section>
         </main>
