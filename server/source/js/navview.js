@@ -9,8 +9,8 @@
  * @param matchValue Value of the filter
  * @returns An array of elements matching the filter
  */
-ko.observableArray.fn.filterByProperty = function (propName, matchValue) {
-    return ko.pureComputed(function () {
+ko.observableArray.fn.filterByProperty = function(propName, matchValue) {
+    return ko.pureComputed(function() {
         var allItems = this(),
             matchingItems = [];
         for (var i = 0; i < allItems.length; i++) {
@@ -31,7 +31,7 @@ ko.observableArray.fn.filterByProperty = function (propName, matchValue) {
  */
 var Map = {
     //Set the Map on page here
-    setMap: function (valueAccessor, element) {
+    setMap: function(valueAccessor, element) {
         var mapObj = ko.utils.unwrapObservable(valueAccessor());
         var latLng = new google.maps.LatLng(
             ko.utils.unwrapObservable(mapObj.lat),
@@ -49,26 +49,26 @@ var Map = {
             content: ""
         });
     },
-    getMap: function () {
+    getMap: function() {
         return this.map;
     },
-    getSearchService: function () {
+    getSearchService: function() {
         return this.searchService;
     },
-    getMapCenter: function () {
+    getMapCenter: function() {
         return {
             lat: ko.observable(40.7127),
             lng: ko.observable(-74.0059)
-        }
+        };
     },
-    getMapDimensions: function () {
+    getMapDimensions: function() {
         var aHeight = $('main').height() + 40;
         return {
             width: '100%',
             height: "" + aHeight + "px"
         };
     },
-    getInfoWindow: function () {
+    getInfoWindow: function() {
         return this.infoWindow;
     }
 };
@@ -84,7 +84,7 @@ var Map = {
  * Also provides an observable to toggle the visibility of the Marker
  * Allows adding a InfoWindow on the Marker
  */
-var Marker = function (placeData, map) {
+var Marker = function(placeData, map) {
     var lat = placeData.geometry.location.lat(); // latitude from the place service
     var lon = placeData.geometry.location.lng(); // longitude from the place service
     var title = placeData.formatted_address; // name of the place from the place service
@@ -101,18 +101,15 @@ var Marker = function (placeData, map) {
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
-        success: function (data) {
+        success: function(data) {
             try {
                 var key = Object.keys(data.query.pages)[0];
                 self.content($($(data.query.pages[key].extract)[0].innerHTML).text());
-            }
-            catch (error) {
-                console.log("Failed to parse content about location : " + self.name);
+            } catch (error) {
                 self.content('Could not get additional information.');
             }
         },
-        error: function () {
-            console.log("Failed to parse content about location : " + self.name);
+        error: function() {
             self.content('Could not get additional information.');
         }
     });
@@ -126,11 +123,11 @@ var Marker = function (placeData, map) {
     });
 
     //Set info window on Map Marker
-    self.setInfoWindow = function (content) {
+    self.setInfoWindow = function(content) {
         // infoWindows are the little helper windows that open when you click
         // or hover over a pin on a map. They usually contain more information
         // about a location.
-        google.maps.event.addListener(self.googleMarker, 'click', function () {
+        google.maps.event.addListener(self.googleMarker, 'click', function() {
             infoWindow = Map.getInfoWindow();
             infoWindow.setContent(self.content());
             infoWindow.open(map, self.googleMarker);
@@ -140,9 +137,9 @@ var Marker = function (placeData, map) {
     //Controls the visibility of the marker on the map
     self.isVisible = ko.observable(false);
 
-    self.isVisible.subscribe(function (visibility) {
+    self.isVisible.subscribe(function(visibility) {
         if (visibility) {
-            self.googleMarker.setMap(map)
+            self.googleMarker.setMap(map);
         } else {
             self.googleMarker.setMap(null);
         }
@@ -173,7 +170,7 @@ function NeighborhoodViewModel() {
 
     //Custom binding for the Map
     ko.bindingHandlers.mapBinder = {
-        init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
             Map.setMap(valueAccessor, element);
         }
     };
@@ -185,7 +182,7 @@ function NeighborhoodViewModel() {
     self.locationLat = ko.observable("");
 
     //Add a new Marker usinf the Google Map Search Service
-    self.addMarkerOnMap = function () {
+    self.addMarkerOnMap = function() {
         var service = Map.getSearchService();
         var request = {
             query: self.locationLat()
@@ -195,13 +192,13 @@ function NeighborhoodViewModel() {
 
     //Callback that actually adds the Marker and also adds it to the list of Markers
     function addMarkerCallback(results, status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
             var currentMap = Map.getMap();
             var newMarker = new Marker(results[0], currentMap);
             newMarker.setInfoWindow(newMarker.title);
             self.markers.push(newMarker);
             self.visibleMarkersCount(self.visibleMarkersCount() + 1);
-            self.locationLat("")
+            self.locationLat("");
         }
     }
 
@@ -212,23 +209,23 @@ function NeighborhoodViewModel() {
     self.visibleMarkersCount = ko.observable(0);
 
     //Keep track when there are no cards being displayed in the list
-    self.showDummyCard = ko.computed(function () {
-        return self.visibleMarkersCount() == 0 && self.toggle;
+    self.showDummyCard = ko.computed(function() {
+        return self.visibleMarkersCount() === 0 && self.toggle;
     });
 
     //Main function controlling the visibility of specific markers
-    self.markerToggler = function (text) {
+    self.markerToggler = function(text) {
         self.visibleMarkersCount(0);
         for (var marker in self.markers()) {
             var markerObj = self.markers()[marker];
-            markerObj.isVisible(markerObj.title().match(text) != null);
+            markerObj.isVisible(markerObj.title().match(text) !== null);
             if (markerObj.isVisible())
                 self.visibleMarkersCount(self.visibleMarkersCount() + 1);
         }
     };
 
     //Toggle to control all markers at once
-    this.toggle.subscribe(function (newValue) {
+    this.toggle.subscribe(function(newValue) {
 
         if (!newValue)
             self.markerToggler(null);
@@ -237,7 +234,7 @@ function NeighborhoodViewModel() {
     });
 
     //Set visibility of markers based on search results
-    this.toggleMarkersForSearch = function (value) {
+    this.toggleMarkersForSearch = function(value) {
         var text = new RegExp(value, 'i');
         self.markerToggler(text);
     };
@@ -249,7 +246,7 @@ function NeighborhoodViewModel() {
 ko.applyBindings(NeighborhoodViewModel);
 
 //Add a resize event to automatically resize map when window is resized.
-$(window).resize(function () {
+$(window).resize(function() {
     google.maps.event.trigger(Map.getMap(), 'resize');
 });
 
@@ -261,7 +258,7 @@ Offline.options = {
     interceptRequests: true
 };
 
-var run = function(){
+var run = function() {
     if (Offline.state === 'up') {
         Offline.check();
     }
