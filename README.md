@@ -10,6 +10,7 @@ The webpage is divided into two tabs
 6. Map markers will display icons that best represent the location.
 7. Map markers can be searched and filtered using the search field in the navigation bar or drawer.
 8. Map markers can be toggled on and off using a toggle in the drawer or navigation bar
+9. The application detects when the user loses connectivity to show an offline message
 
 <b>How to run the application?</b>
 
