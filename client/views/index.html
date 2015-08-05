@@ -10,24 +10,35 @@
 
 <body>
 <div class="mdl-layout__container">
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header  mdl-layout--fixed-tabs">
         <header class="mdl-layout__header" id="headerTabs">
             <div class="mdl-layout__header-row">
                 <!-- Title -->
                 <span class="mdl-layout-title">NeighborhoodMap</span>
                 <!-- Add spacer, to align navigation to the right -->
-                <div class="mdl-layout-spacer"></div>
                 <!-- Navigation. We hide it in small screens. -->
                 <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <form action="#">
-                        <div class="mdl-textfield mdl-js-textfield textfield-demo">
-                            <input data-bind='value: locationLat' class="mdl-textfield__input" type="text" id="locationIp" />
-                            <label class="mdl-textfield__label" for="locationIp">Add Location</label>
+                    <div class="mdl-navigation__link">
+                        <form action="#">
+                            <div class="mdl-textfield mdl-js-textfield textfield-demo">
+                                <input data-bind='value: locationLat' class="mdl-textfield__input" type="text" id="locationIp" />
+                                <label class="mdl-textfield__label" for="locationIp">Add Location</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mdl-navigation__link">
+                    <div class="selectBox">
+                        <div class="mdl-selectfield">
+                            <select data-bind="options: availableTypes, value: selectedType, optionsCaption: 'Choose Type'" class="browser-default">
+                            </select>
                         </div>
-                        <button data-bind='click: addNewMarkerOnMap' class="mdl-button mdl-js-button mdl-button--accent">
-                            Add
-                        </button>
-                    </form>
+                    </div>
+                        </div>
+                    <div class="mdl-navigation__link">
+                    <button data-bind='click: addNewMarkerOnMap' class="mdl-button mdl-js-button mdl-button--accent">
+                        Add
+                    </button>
+                        </div>
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
                             mdl-textfield--floating-label mdl-textfield--align-right">
                         <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
@@ -38,11 +49,13 @@
                         </div>
                     </div>
                     <div class="mdl-navigation__link">
+                    <div class="mdl-navigation__link">
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="dMarkerToggle">
                             <input data-bind='checked: toggle' type="checkbox" id="dMarkerToggle" class="mdl-switch__input" checked />
                             <span class="mdl-switch__label"></span>
                         </label>
                     </div>
+                        </div>
                 </nav>
             </div>
             <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
@@ -58,7 +71,13 @@
                         <input data-bind='value: locationLat' class="mdl-textfield__input" type="text" id="mobileLocationIp" />
                         <label class="mdl-textfield__label" for="mobileLocationIp">Add Location</label>
                     </div>
-                    <button data-bind='click: addNewMarkerOnMap' class="mdl-button mdl-js-button mdl-button--accent centeredButton">
+                    <div class="selectBox">
+                        <div class="mdl-selectfield">
+                            <select data-bind="options: availableTypes, value: selectedType, optionsCaption: 'Choose Type'" class="browser-default">
+                            </select>
+                        </div>
+                    </div>
+                    <button data-bind='click: addNewMarkerOnMap' class="mdl-button mdl-js-button mdl-button--accent centeredButton mobileButton">
                         Add
                     </button>
                 </form>
@@ -180,7 +199,7 @@
 <script async src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script async src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
 <script async src="../dist/knockout.min.js"></script>
-<script async src="../dist/all.min.js"></script>
+<script async src="../dist/navview.js"></script>
 </body>
 
 </html>

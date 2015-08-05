@@ -14,3 +14,54 @@ body {
 .mapContent {
     padding-top: 0;
 }
+
+.mdl-textfield__label {
+    color: rgba(0,0,0, 0.50);
+}
+
+.mobileButton {
+    padding-top: 10px;
+}
+
+/* Based on http://codepen.io/pudgereyem/pen/PqBxQx/ */
+.selectBox {
+    width: 150px;
+    padding-top: 30px;
+    margin: 0 auto;
+    top: 50%;
+    margin-top: -2em;
+    right: 0;
+    left: 0;
+}
+
+select {
+    font-family: inherit;
+    background-color: transparent;
+    width: 100%;
+    padding: 0 0 0 0;
+    font-size: 16px;
+    color: rgba(0,0,0, 0.50);
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0, 0.12);
+}
+/* Remove focus */
+select:focus {
+    outline: none
+}
+
+/* Hide label */
+.mdl-selectfield label {display: none;}
+/* Use custom arrow */
+.mdl-selectfield select {appearance: none}
+.mdl-selectfield {
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    position: relative;
+}
+.mdl-selectfield:after {
+         position: absolute;
+         top: 0.75em;
+         right: 0.5em;
+
+ }
+
+
