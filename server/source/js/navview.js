@@ -200,13 +200,18 @@ function NeighborhoodViewModel() {
     };
 
     function includeMarker(results, status) {
-        var currentMap = Map.getMap();
-        var newMarker = new Marker(results[0], currentMap);
-        self.markers.push(newMarker);
-        self.visibleMarkersCount(self.visibleMarkersCount() + 1);
-        self.locationLat("");
-        self.selectedType("");
-        return newMarker;
+        if(results !== undefined && results.length > 0) {
+            var currentMap = Map.getMap();
+            var newMarker = new Marker(results[0], currentMap);
+            self.markers.push(newMarker);
+            self.visibleMarkersCount(self.visibleMarkersCount() + 1);
+            self.locationLat("");
+            self.selectedType("");
+            return newMarker;
+        }
+        else{
+            alert("No matching location found!");
+        }
     }
 
     //Callback that actually adds the Marker and also adds it to the list of Markers
