@@ -74,7 +74,13 @@ var Map = {
         var request = {
             query: location
         };
-        service.textSearch(request, callback);
+        if (Offline.state == "down")
+        {
+            alert("No network");
+        }
+        else {
+            service.textSearch(request, callback);
+        }
     }
 };
 
@@ -157,7 +163,8 @@ function NeighborhoodViewModel() {
     var self = this;
 
     var infoFunctionsMap = {
-        "Location": addMarkerWithWikiInfo
+        "Location": addMarkerWithWikiInfo,
+        "Business":addMarkerWithYelpInfo
     };
 
     //Custom binding for the Map
@@ -175,7 +182,7 @@ function NeighborhoodViewModel() {
 
     //Add a new Marker usinf the Google Map Search Service
     self.addNewMarkerOnMap = function() {
-        self.addMarkerOnMap(self.locationLat(), addMarkerWithWikiInfo);
+        self.addMarkerWithInfo(self.locationLat(), "Location");
     };
 
     self.addMarkerWithInfo = function(location, type) {
@@ -197,6 +204,14 @@ function NeighborhoodViewModel() {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var newMarker = includeMarker(results, status);
             setDataFromWikipedia(newMarker);
+        }
+    }
+
+    //Callback that actually adds the Marker and also adds it to the list of Markers
+    function addMarkerWithYelpInfo(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            var newMarker = includeMarker(results, status);
+            setDataFromYelp(newMarker);
         }
     }
 
@@ -244,34 +259,72 @@ function initialize(neighborhood) {
     var localities = [
         "New York, NY", "London, UK", "Mumbai, India", "Paris, France"
     ];
+    var businesses = ["45 Rockefeller Plaza, New York"];
 
     for(var loc in localities) {
         neighborhood.addMarkerWithInfo(localities[loc], "Location");
+    }
+
+    for(var business in businesses) {
+        neighborhood.addMarkerWithInfo(businesses[business], "Business");
     }
 }
 
 
 function setDataFromWikipedia(marker){
-    $.ajax({
-        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + marker.name,
-        type: 'GET',
-        crossDomain: true,
-        dataType: 'jsonp',
-        timeout: 5000,
-        success: function(data) {
-            var content;
-            try {
-                var key = Object.keys(data.query.pages)[0];
-                content = $($(data.query.pages[key].extract)[0].innerHTML).text();
-            } catch (error) {
-                content = 'Could not get additional information.';
+    if (Offline.state == "down")
+    {
+        alert("No network");
+    }
+    else {
+        $.ajax({
+            url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + marker.name,
+            type: 'GET',
+            crossDomain: true,
+            dataType: 'jsonp',
+            timeout: 5000,
+            success: function (data) {
+                var content;
+                try {
+                    var key = Object.keys(data.query.pages)[0];
+                    content = $($(data.query.pages[key].extract)[0].innerHTML).text();
+                } catch (error) {
+                    content = 'Could not get additional information.';
+                }
+                marker.setClickEvent(content);
+            },
+            error: function () {
+                marker.setClickEvent('Could not get additional information.');
             }
-            marker.setClickEvent(content);
-        },
-        error: function() {
-            self.content('Could not get additional information.');
-        }
-    });
+        });
+    }
+}
+
+
+function setDataFromYelp(marker){
+    if (Offline.state == "down") {
+        alert("No network");
+    }
+    else {
+        $.ajax({
+            url: '/yelpData?address=' + marker.name,
+            type: 'GET',
+            dataType: 'json',
+            timeout: 5000,
+            success: function (data) {
+                var content;
+                try {
+                    content = $('<ul></ul>').html("<li>" + data.Summary + "</li>");
+                } catch (error) {
+                    content = 'Could not get additional information.';
+                }
+                marker.setClickEvent(content.html());
+            },
+            error: function () {
+                marker.setClickEvent('Could not get additional information.');
+            }
+        });
+    }
 }
 
 

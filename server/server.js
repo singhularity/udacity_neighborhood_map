@@ -20,7 +20,7 @@ app.use(express.urlencoded());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(app.router);
-var yelpData = require('/Users/ssingh/WebstormProjects/neighborhoodmap/server/source/js/yelp_search.js');
+var yelpData = require('./yelp_search.js');
 
 // development only
 if ('development' == app.get('env')) {

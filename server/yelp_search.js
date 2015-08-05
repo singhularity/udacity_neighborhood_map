@@ -8,7 +8,7 @@
 
 module.exports = {
     getSearchData: function (req, res) {
-        return search(res);
+        return search(req.query.address, res);
     }
 };
 
@@ -20,8 +20,16 @@ var yelp = require("yelp").createClient({
 });
 
 // See http://www.yelp.com/developers/documentation/v2/search_api
-var search = function(res){
-    yelp.search({location: "45 Rockefeller Plaza, New York"}, function(error, data) {
-        res.send({snippet_text: data['businesses'][0]['snippet_text']});
+var search = function(address, res){
+    yelp.search({location: address}, function(error, data) {
+        if (error === null) {
+            var topChoice = data['businesses'][0];
+            res.send({
+                Summary: topChoice['snippet_text'], Name: topChoice['name'],
+                Rating: topChoice['rating'], Url: topChoice['url']
+            });
+        }
+        else
+            res.send("");
     });
 };
