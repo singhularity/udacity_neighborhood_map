@@ -69,7 +69,7 @@ var Map = {
         this.infoWindow.setContent(content);
         this.infoWindow.open(this.map, googleMarker);
     },
-    addMarkerGeneric: function(location, callback){
+    addMarkerOnMap: function(location, callback){
         var service = this.searchService;
         var request = {
             query: location
@@ -106,12 +106,6 @@ var Marker = function(placeData, map) {
     self.content = ko.observable("");
     self.infolink = ko.observable("https://en.wikipedia.org/wiki/" + self.name);
 
-    //function setContent(content) {
-    //    self.content(content);
-    //}
-    //
-    ////Get data to be displayed on InfoWindow and in location cards
-
     //Create the Marker to be put on map here
     self.googleMarker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, lon),
@@ -121,7 +115,8 @@ var Marker = function(placeData, map) {
     });
 
     //Set info window on Map Marker
-    self.setInfoWindow = function(content) {
+    self.setClickEvent = function(content) {
+        this.content(content);
         google.maps.event.addListener(self.googleMarker, 'click', function() {
             Map.setInfoWindow(content, self.googleMarker);
         });
@@ -161,6 +156,10 @@ var Marker = function(placeData, map) {
 function NeighborhoodViewModel() {
     var self = this;
 
+    var infoFunctionsMap = {
+        "Location": addMarkerWithWikiInfo
+    };
+
     //Custom binding for the Map
     ko.bindingHandlers.mapBinder = {
         init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
@@ -176,41 +175,28 @@ function NeighborhoodViewModel() {
 
     //Add a new Marker usinf the Google Map Search Service
     self.addNewMarkerOnMap = function() {
-        self.addMarkerOnMap(self.locationLat(), addMarkerCallback());
+        self.addMarkerOnMap(self.locationLat(), addMarkerWithWikiInfo);
     };
 
-    self.addMarkerOnMap = function(location) {
-        Map.addMarkerGeneric(location, addMarkerCallback);
+    self.addMarkerWithInfo = function(location, type) {
+        var callBackFunction = infoFunctionsMap[type];
+        Map.addMarkerOnMap(location, callBackFunction);
     };
+
+    function includeMarker(results, status) {
+        var currentMap = Map.getMap();
+        var newMarker = new Marker(results[0], currentMap);
+        self.markers.push(newMarker);
+        self.visibleMarkersCount(self.visibleMarkersCount() + 1);
+        self.locationLat("");
+        return newMarker;
+    }
 
     //Callback that actually adds the Marker and also adds it to the list of Markers
-    function addMarkerCallback(results, status) {
+    function addMarkerWithWikiInfo(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            var currentMap = Map.getMap();
-            var newMarker = new Marker(results[0], currentMap);
-            self.markers.push(newMarker);
-            $.ajax({
-                url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + newMarker.name,
-                type: 'GET',
-                crossDomain: true,
-                dataType: 'jsonp',
-                timeout: 5000,
-                success: function(data) {
-                    var content;
-                    try {
-                        var key = Object.keys(data.query.pages)[0];
-                        content = $($(data.query.pages[key].extract)[0].innerHTML).text();
-                    } catch (error) {
-                        content = 'Could not get additional information.';
-                    }
-                    newMarker.setInfoWindow(content)
-                },
-                error: function() {
-                    self.content('Could not get additional information.');
-                }
-            });
-            self.visibleMarkersCount(self.visibleMarkersCount() + 1);
-            self.locationLat("");
+            var newMarker = includeMarker(results, status);
+            setDataFromWikipedia(newMarker);
         }
     }
 
@@ -254,21 +240,20 @@ function NeighborhoodViewModel() {
     self.titleSearch.subscribe(self.toggleMarkersForSearch);
 }
 
-ko.applyBindings(NeighborhoodViewModel);
-
-function initialize() {
+function initialize(neighborhood) {
     var localities = [
         "New York, NY", "London, UK", "Mumbai, India", "Paris, France"
     ];
 
     for(var loc in localities) {
-        (new NeighborhoodViewModel()).addMarkerOnMap(localities[loc]);
+        neighborhood.addMarkerWithInfo(localities[loc], "Location");
     }
 }
 
-function setDataFromWikipedia(name, marker){
+
+function setDataFromWikipedia(marker){
     $.ajax({
-        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + name,
+        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + marker.name,
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
@@ -281,7 +266,7 @@ function setDataFromWikipedia(name, marker){
             } catch (error) {
                 content = 'Could not get additional information.';
             }
-            marker.setInfoWindow(content)
+            marker.setClickEvent(content);
         },
         error: function() {
             self.content('Could not get additional information.');
@@ -315,6 +300,7 @@ var run = function() {
 };
 setInterval(run, 5000);
 
-$(window).load(function() {
-    initialize();
-});
+var neighbourHood = new NeighborhoodViewModel();
+ko.applyBindings(neighbourHood);
+initialize(neighbourHood);
+
