@@ -279,26 +279,25 @@ function initialize(neighborhood) {
     for(var loc in localities) {
         neighborhood.addMarkerWithInfo(localities[loc], "City");
     }
-    //for(var business in businesses) {
-    //    neighborhood.addMarkerWithInfo(businesses[business], "Business");
-    //}
+
+    for(var business in businesses) {
+        neighborhood.addMarkerWithInfo(businesses[business], "Business");
+    }
 }
 
-function setDataFromWikipedia(marker){
+function setDataFromServer(url, marker, callback) {
     if (Offline.state == "down")
     {
         alert("No network");
     }
     else {
         $.ajax({
-            url: '/wikiData?name=' + marker.name,
+            url: url,
             type: 'GET',
             dataType: 'json',
             timeout: 5000,
             success: function (data) {
-                var content = data.content;
-                marker.setClickEvent(content);
-                marker.infolink("https://en.wikipedia.org/wiki/" + marker.name);
+                callback(marker, data);
             },
             error: function () {
                 marker.setClickEvent('Could not get additional information.');
@@ -307,34 +306,30 @@ function setDataFromWikipedia(marker){
     }
 }
 
+function setDataFromWikipedia(marker){
+    setDataFromServer('/wikiData?name=' + marker.name, marker, wikipediaDataCallback);
+}
 
 function setDataFromYelp(marker){
-    if (Offline.state == "down") {
-        alert("No network");
-    }
-    else {
-        $.ajax({
-            url: '/yelpData?address=' + marker.name,
-            type: 'GET',
-            dataType: 'json',
-            timeout: 5000,
-            success: function (data) {
-                var content;
-                try {
-                    content = "<ul><li id='summary'>" + data.Name + "</li></ul>";
-                } catch (error) {
-                    content = 'Could not get additional information.';
-                }
-                marker.setClickEvent(content);
-                marker.infolink(data.url);
-            },
-            error: function () {
-                marker.setClickEvent('Could not get additional information.');
-            }
-        });
-    }
+    setDataFromServer('/yelpData?address=' + marker.name, marker, yelpDataCallback);
 }
 
+function wikipediaDataCallback(marker, data) {
+    var content = data.content;
+    marker.setClickEvent(content);
+    marker.infolink("https://en.wikipedia.org/wiki/" + marker.name);
+}
+
+function yelpDataCallback(marker, data) {
+    var content = data.content;
+    try {
+        content = "<ul><li id='summary'>" + content.Name + "</li></ul>";
+    } catch (error) {
+        content = 'Could not get additional information.';
+    }
+    marker.setClickEvent(content);
+    marker.infolink(data.url);
+}
 
 //Add a resize event to automatically resize map when window is resized.
 $(window).resize(function() {
@@ -350,8 +345,8 @@ Offline.options = {
 
     requests: true,
 
-    game: true
-    //checks: {xhr: {url: '/heartbeat'}}
+    game: true,
+    checks: {xhr: {url: '/heartbeat'}}
 };
 
 var run = function() {

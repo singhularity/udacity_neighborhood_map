@@ -24,9 +24,9 @@ var search = function(address, res){
     yelp.search({location: address}, function(error, data) {
         if (error === null) {
             var topChoice = data['businesses'][0];
-            res.send({
-                Summary: topChoice['snippet_text'], Name: topChoice['name'],
-                Rating: topChoice['rating'], Url: topChoice['url']
+            res.send({content: { Summary: topChoice['snippet_text'], Name: topChoice['name'],
+                    Rating: topChoice['rating'], Url: topChoice['url']
+                }
             });
         }
         else
