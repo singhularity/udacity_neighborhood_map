@@ -20,7 +20,8 @@
     "gulp-concat": "*",
     "gulp-rename": "*",
     "gulp-uglify": "*",
-    "gulp-sourcemaps": "*"
+    "gulp-sourcemaps": "*",
+    "yelp": "*"
   },
   "webkit": {
     "plugin": true
