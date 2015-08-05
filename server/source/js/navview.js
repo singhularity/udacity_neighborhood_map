@@ -52,9 +52,6 @@ var Map = {
     getMap: function() {
         return this.map;
     },
-    getSearchService: function() {
-        return this.searchService;
-    },
     getMapCenter: function() {
         return {
             lat: ko.observable(40.7127),
@@ -68,8 +65,16 @@ var Map = {
             height: "" + aHeight + "px"
         };
     },
-    getInfoWindow: function() {
-        return this.infoWindow;
+    setInfoWindow: function(content, googleMarker) {
+        this.infoWindow.setContent(content);
+        this.infoWindow.open(this.map, googleMarker);
+    },
+    addMarkerGeneric: function(location, callback){
+        var service = this.searchService;
+        var request = {
+            query: location
+        };
+        service.textSearch(request, callback);
     }
 };
 
@@ -89,30 +94,23 @@ var Marker = function(placeData, map) {
     var lon = placeData.geometry.location.lng(); // longitude from the place service
     var title = placeData.formatted_address; // name of the place from the place service
     var self = this;
-    self.icon = placeData.icon;
+    self.icon = {
+        url: placeData.icon,
+        size: new google.maps.Size(80, 80),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(35, 35)
+    };
     self.title = ko.observable(title);
     self.name = placeData.name;
     self.content = ko.observable("");
     self.infolink = ko.observable("https://en.wikipedia.org/wiki/" + self.name);
 
-    //Get data to be displayed on InfoWindow and in location cards
-    $.ajax({
-        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + self.name,
-        type: 'GET',
-        crossDomain: true,
-        dataType: 'jsonp',
-        success: function(data) {
-            try {
-                var key = Object.keys(data.query.pages)[0];
-                self.content($($(data.query.pages[key].extract)[0].innerHTML).text());
-            } catch (error) {
-                self.content('Could not get additional information.');
-            }
-        },
-        error: function() {
-            self.content('Could not get additional information.');
-        }
-    });
+    //function setContent(content) {
+    //    self.content(content);
+    //}
+    //
+    ////Get data to be displayed on InfoWindow and in location cards
 
     //Create the Marker to be put on map here
     self.googleMarker = new google.maps.Marker({
@@ -124,13 +122,8 @@ var Marker = function(placeData, map) {
 
     //Set info window on Map Marker
     self.setInfoWindow = function(content) {
-        // infoWindows are the little helper windows that open when you click
-        // or hover over a pin on a map. They usually contain more information
-        // about a location.
         google.maps.event.addListener(self.googleMarker, 'click', function() {
-            infoWindow = Map.getInfoWindow();
-            infoWindow.setContent(self.content());
-            infoWindow.open(map, self.googleMarker);
+            Map.setInfoWindow(content, self.googleMarker);
         });
     };
 
@@ -182,12 +175,12 @@ function NeighborhoodViewModel() {
     self.locationLat = ko.observable("");
 
     //Add a new Marker usinf the Google Map Search Service
-    self.addMarkerOnMap = function() {
-        var service = Map.getSearchService();
-        var request = {
-            query: self.locationLat()
-        };
-        service.textSearch(request, addMarkerCallback);
+    self.addNewMarkerOnMap = function() {
+        self.addMarkerOnMap(self.locationLat(), addMarkerCallback());
+    };
+
+    self.addMarkerOnMap = function(location) {
+        Map.addMarkerGeneric(location, addMarkerCallback);
     };
 
     //Callback that actually adds the Marker and also adds it to the list of Markers
@@ -195,8 +188,27 @@ function NeighborhoodViewModel() {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var currentMap = Map.getMap();
             var newMarker = new Marker(results[0], currentMap);
-            newMarker.setInfoWindow(newMarker.title);
             self.markers.push(newMarker);
+            $.ajax({
+                url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + newMarker.name,
+                type: 'GET',
+                crossDomain: true,
+                dataType: 'jsonp',
+                timeout: 5000,
+                success: function(data) {
+                    var content;
+                    try {
+                        var key = Object.keys(data.query.pages)[0];
+                        content = $($(data.query.pages[key].extract)[0].innerHTML).text();
+                    } catch (error) {
+                        content = 'Could not get additional information.';
+                    }
+                    newMarker.setInfoWindow(content)
+                },
+                error: function() {
+                    self.content('Could not get additional information.');
+                }
+            });
             self.visibleMarkersCount(self.visibleMarkersCount() + 1);
             self.locationLat("");
         }
@@ -242,8 +254,41 @@ function NeighborhoodViewModel() {
     self.titleSearch.subscribe(self.toggleMarkersForSearch);
 }
 
-//Apply Knockout bindings
 ko.applyBindings(NeighborhoodViewModel);
+
+function initialize() {
+    var localities = [
+        "New York, NY", "London, UK", "Mumbai, India", "Paris, France"
+    ];
+
+    for(var loc in localities) {
+        (new NeighborhoodViewModel()).addMarkerOnMap(localities[loc]);
+    }
+}
+
+function setDataFromWikipedia(name, marker){
+    $.ajax({
+        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=' + name,
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'jsonp',
+        timeout: 5000,
+        success: function(data) {
+            var content;
+            try {
+                var key = Object.keys(data.query.pages)[0];
+                content = $($(data.query.pages[key].extract)[0].innerHTML).text();
+            } catch (error) {
+                content = 'Could not get additional information.';
+            }
+            marker.setInfoWindow(content)
+        },
+        error: function() {
+            self.content('Could not get additional information.');
+        }
+    });
+}
+
 
 //Add a resize event to automatically resize map when window is resized.
 $(window).resize(function() {
@@ -255,7 +300,12 @@ Offline.options = {
     checkOnLoad: true,
 
     // Should we monitor AJAX requests to help decide if we have a connection.
-    interceptRequests: true
+    interceptRequests: true,
+
+    requests: true,
+
+    game: true
+    //checks: {xhr: {url: '/heartbeat'}}
 };
 
 var run = function() {
@@ -264,3 +314,7 @@ var run = function() {
     }
 };
 setInterval(run, 5000);
+
+$(window).load(function() {
+    initialize();
+});
