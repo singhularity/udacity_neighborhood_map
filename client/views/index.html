@@ -1,205 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Neighborhood Map</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="icon" href="favicon.ico">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Neighborhood Map</title>
+    </head>
 
-<body>
-<div class="mdl-layout__container">
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header  mdl-layout--fixed-tabs">
-        <header class="mdl-layout__header" id="headerTabs">
-            <div class="mdl-layout__header-row">
-                <!-- Title -->
-                <span class="mdl-layout-title">NeighborhoodMap</span>
-                <!-- Add spacer, to align navigation to the right -->
-                <!-- Navigation. We hide it in small screens. -->
-                <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <div class="mdl-navigation__link">
-                        <form action="#">
-                            <div class="mdl-textfield mdl-js-textfield textfield-demo">
-                                <input data-bind='value: locationLat' class="mdl-textfield__input" type="text" id="locationIp" />
-                                <label class="mdl-textfield__label" for="locationIp">Add Location</label>
+    <body>
+    <div class="mdl-layout__container">
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header  mdl-layout--fixed-tabs">
+            <header class="mdl-layout__header" id="headerTabs">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title">NeighborhoodMap</span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <!-- Navigation. We hide it in small screens. -->
+                    <nav class="mdl-navigation mdl-layout--large-screen-only">
+                        <div class="mdl-navigation__link">
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield textfield-demo">
+                                    <input data-bind='value: locationLat' class="mdl-textfield__input" type="text" id="locationIp" />
+                                    <label class="mdl-textfield__label" for="locationIp">Add Location</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mdl-navigation__link">
+                            <div class="selectBox">
+                                <div class="mdl-selectfield">
+                                    <select data-bind="options: availableTypes, value: selectedType, optionsCaption: 'Choose Type'" class="browser-default">
+                                    </select>
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="mdl-navigation__link">
+                            <button data-bind='click: addNewMarkerOnMap' class="mdl-button mdl-js-button mdl-button--accent">
+                                Add
+                            </button>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                                mdl-textfield--floating-label mdl-textfield--align-right">
+                            <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
+                                <i class="material-icons">search</i>
+                            </label>
+                            <div class="mdl-textfield__expandable-holder">
+                                <input data-bind="value: titleSearch, valueUpdate: 'keyup'" class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp" />
+                            </div>
+                        </div>
+                        <div class="mdl-navigation__link">
+                            <div class="mdl-navigation__link">
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="dMarkerToggle">
+                                    <input data-bind='checked: toggle' type="checkbox" id="dMarkerToggle" class="mdl-switch__input" checked />
+                                    <span class="mdl-switch__label"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                    <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Map</a>
+                    <a href="#fixed-tab-2" class="mdl-layout__tab">List of Locations</a>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">NeighborhoodMap</span>
+                <nav class="mdl-navigation">
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield textfield-demo">
+                            <input data-bind='value: locationLat' class="mdl-textfield__input" type="text" id="mobileLocationIp" />
+                            <label class="mdl-textfield__label" for="mobileLocationIp">Add Location</label>
+                        </div>
+                        <div class="selectBox">
+                            <div class="mdl-selectfield">
+                                <select data-bind="options: availableTypes, value: selectedType, optionsCaption: 'Choose Type'" class="browser-default">
+                                </select>
+                            </div>
+                        </div>
+                        <button data-bind='click: addNewMarkerOnMap' class="mdl-button mdl-js-button mdl-button--accent centeredButton mobileButton">
+                            Add
+                        </button>
+                    </form>
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+                            <input data-bind="value: titleSearch, valueUpdate: 'keyup'" class="mdl-textfield__input" type="text" id="searchMobile" />
+                            <label class="mdl-textfield__label" for="searchMobile">Search</label>
+                        </div>
+                    </form>
                     <div class="mdl-navigation__link">
-                    <div class="selectBox">
-                        <div class="mdl-selectfield">
-                            <select data-bind="options: availableTypes, value: selectedType, optionsCaption: 'Choose Type'" class="browser-default">
-                            </select>
-                        </div>
-                    </div>
-                        </div>
-                    <div class="mdl-navigation__link">
-                    <button data-bind='click: addNewMarkerOnMap' class="mdl-button mdl-js-button mdl-button--accent">
-                        Add
-                    </button>
-                        </div>
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
-                            mdl-textfield--floating-label mdl-textfield--align-right">
-                        <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
-                            <i class="material-icons">search</i>
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="mMarkerToggle">
+                            <input data-bind='checked: toggle' type="checkbox" id="mMarkerToggle" class="mdl-switch__input" checked />
+                            <span class="mdl-switch__label">Toggle Markers</span>
                         </label>
-                        <div class="mdl-textfield__expandable-holder">
-                            <input data-bind="value: titleSearch, valueUpdate: 'keyup'" class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp" />
-                        </div>
                     </div>
-                    <div class="mdl-navigation__link">
-                    <div class="mdl-navigation__link">
-                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="dMarkerToggle">
-                            <input data-bind='checked: toggle' type="checkbox" id="dMarkerToggle" class="mdl-switch__input" checked />
-                            <span class="mdl-switch__label"></span>
-                        </label>
-                    </div>
-                        </div>
                 </nav>
             </div>
-            <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-                <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Map</a>
-                <a href="#fixed-tab-2" class="mdl-layout__tab">List of Locations</a>
-            </div>
-        </header>
-        <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">NeighborhoodMap</span>
-            <nav class="mdl-navigation">
-                <form action="#">
-                    <div class="mdl-textfield mdl-js-textfield textfield-demo">
-                        <input data-bind='value: locationLat' class="mdl-textfield__input" type="text" id="mobileLocationIp" />
-                        <label class="mdl-textfield__label" for="mobileLocationIp">Add Location</label>
-                    </div>
-                    <div class="selectBox">
-                        <div class="mdl-selectfield">
-                            <select data-bind="options: availableTypes, value: selectedType, optionsCaption: 'Choose Type'" class="browser-default">
-                            </select>
-                        </div>
-                    </div>
-                    <button data-bind='click: addNewMarkerOnMap' class="mdl-button mdl-js-button mdl-button--accent centeredButton mobileButton">
-                        Add
-                    </button>
-                </form>
-                <form action="#">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
-                        <input data-bind="value: titleSearch, valueUpdate: 'keyup'" class="mdl-textfield__input" type="text" id="searchMobile" />
-                        <label class="mdl-textfield__label" for="searchMobile">Search</label>
-                    </div>
-                </form>
-                <div class="mdl-navigation__link">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="mMarkerToggle">
-                        <input data-bind='checked: toggle' type="checkbox" id="mMarkerToggle" class="mdl-switch__input" checked />
-                        <span class="mdl-switch__label">Toggle Markers</span>
-                    </label>
-                </div>
-            </nav>
-        </div>
-        <main class="mdl-layout__content">
-            <section class="mdl-layout__tab-panel" id="fixed-tab-2">
-                <div class="page-content">
-                    <div class="demo-grid-1 mdl-grid" data-bind="visible: showDummyCard">
-                        <div class="mdl-cell mdl-cell--2-col"></div>
-                        <div class="mdl-cell mdl-cell--8-col">
-                            <div class="mdl-card__title">
-                                <h2 class="mdl-card__title-text">No Locations to show!</h2>
-                            </div>
-                            <div class="mdl-cell mdl-cell--2-col"></div>
-                        </div>
-                    </div>
-                    <!--<h3>All Locations(<span data-bind="text: markers().length"></span>)</h3>-->
-                    <div data-bind="foreach: markers">
-                        <div class="demo-grid-1 mdl-grid" data-bind="visible: isVisible">
+            <main class="mdl-layout__content">
+                <section class="mdl-layout__tab-panel" id="fixed-tab-2">
+                    <div class="page-content">
+                        <div class="demo-grid-1 mdl-grid" data-bind="visible: showDummyCard">
                             <div class="mdl-cell mdl-cell--2-col"></div>
                             <div class="mdl-cell mdl-cell--8-col">
-                                <div class="mdl-card mdl-shadow--2dp wideCard">
-                                    <div class="mdl-card__title">
-                                        <h2 data-bind="text: title" class="mdl-card__title-text">Location</h2>
-                                    </div>
-                                    <div class="mdl-card__actions mdl-card--border">
-                                        <div data-bind="text: content" class="mdl-card__supporting-text"></div>
-                                        <div class="mdl-card__actions mdl-card--border">
-                                            <a class="mdl-button mdl-button--colored mdl-js-button" target="_blank" data-bind="attr:{href: infolink, details: title}">
-                                                More Info
-                                            </a>
-                                        </div>
-                                    </div>
+                                <div class="mdl-card__title">
+                                    <h2 class="mdl-card__title-text">No Locations to show!</h2>
                                 </div>
                                 <div class="mdl-cell mdl-cell--2-col"></div>
                             </div>
                         </div>
+                        <!--<h3>All Locations(<span data-bind="text: markers().length"></span>)</h3>-->
+                        <div data-bind="foreach: markers">
+                            <div class="demo-grid-1 mdl-grid" data-bind="visible: isVisible">
+                                <div class="mdl-cell mdl-cell--2-col"></div>
+                                <div class="mdl-cell mdl-cell--8-col">
+                                    <div class="mdl-card mdl-shadow--2dp wideCard">
+                                        <div class="mdl-card__title">
+                                            <h2 data-bind="text: title" class="mdl-card__title-text">Location</h2>
+                                        </div>
+                                        <div class="mdl-card__actions mdl-card--border">
+                                            <div data-bind="text: content" class="mdl-card__supporting-text"></div>
+                                            <div class="mdl-card__actions mdl-card--border">
+                                                <a class="mdl-button mdl-button--colored mdl-js-button" target="_blank" data-bind="attr:{href: infolink, details: title}">
+                                                    More Info
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--2-col"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
+                    <div class="page-content">
+                        <div class="demo-grid-1 mdl-grid mapContent">
+                            <div id="mapDiv" data-bind="style: mapDimensions,mapBinder:centerMap"></div>
+                        </div>
                     </div>
                 </div>
-            </section>
-            <div class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
-                <div class="page-content">
-                    <div class="demo-grid-1 mdl-grid mapContent">
-                        <div id="mapDiv" data-bind="style: mapDimensions,mapBinder:centerMap"></div>
-                    </div>
-                </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
-</div>
-<script>
-    var cb = function() {
-        var l = document.createElement('link');
-        var l = document.createElement('link');
-        l.rel = 'stylesheet';
-        l.href = 'https://storage.googleapis.com/code.getmdl.io/1.0.2/material.teal-red.min.css';
-        var h = document.getElementsByTagName('head')[0];
-        h.parentNode.insertBefore(l, h);
-    };
-    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-            webkitRequestAnimationFrame || msRequestAnimationFrame;
-    if (raf) raf(cb);
-    else window.addEventListener('load', cb);
-</script>
-<script>
-    var cb = function() {
-        var l = document.createElement('link');
-        l.rel = 'stylesheet';
-        l.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
-        var h = document.getElementsByTagName('head')[0];
-        h.parentNode.insertBefore(l, h);
-    };
-    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-            webkitRequestAnimationFrame || msRequestAnimationFrame;
-    if (raf) raf(cb);
-    else window.addEventListener('load', cb);
-</script>
-<script>
-    var cb = function() {
-        var l = document.createElement('link');
-        l.rel = 'stylesheet';
-        l.href = '../css/style.css';
-        var h = document.getElementsByTagName('head')[0];
-        h.parentNode.insertBefore(l, h);
-    };
-    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-            webkitRequestAnimationFrame || msRequestAnimationFrame;
-    if (raf) raf(cb);
-    else window.addEventListener('load', cb);
-</script>
-<script>
-    var cb = function() {
-        var l = document.createElement('link');
-        l.rel = 'stylesheet';
-        l.href = '../css/offline.min.css';
-        var h = document.getElementsByTagName('head')[0];
-        h.parentNode.insertBefore(l, h);
-    };
-    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-            webkitRequestAnimationFrame || msRequestAnimationFrame;
-    if (raf) raf(cb);
-    else window.addEventListener('load', cb);
-</script>
-<script defer src="../dist/offline.min.js"></script>
-<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
-<script defer src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script defer src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
-<script defer src="../dist/knockout.min.js"></script>
-<script defer src="../dist/all.min.js"></script>
-</body>
+    <script>
+        var cb = function() {
+            var l = document.createElement('link');
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = 'https://storage.googleapis.com/code.getmdl.io/1.0.2/material.teal-red.min.css';
+            var h = document.getElementsByTagName('head')[0];
+            h.parentNode.insertBefore(l, h);
+        };
+        var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+                webkitRequestAnimationFrame || msRequestAnimationFrame;
+        if (raf) raf(cb);
+        else window.addEventListener('load', cb);
+    </script>
+    <script>
+        var cb = function() {
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
+            var h = document.getElementsByTagName('head')[0];
+            h.parentNode.insertBefore(l, h);
+        };
+        var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+                webkitRequestAnimationFrame || msRequestAnimationFrame;
+        if (raf) raf(cb);
+        else window.addEventListener('load', cb);
+    </script>
+    <script>
+        var cb = function() {
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = '../css/style.css';
+            var h = document.getElementsByTagName('head')[0];
+            h.parentNode.insertBefore(l, h);
+        };
+        var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+                webkitRequestAnimationFrame || msRequestAnimationFrame;
+        if (raf) raf(cb);
+        else window.addEventListener('load', cb);
+    </script>
+    <script>
+        var cb = function() {
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = '../css/offline.min.css';
+            var h = document.getElementsByTagName('head')[0];
+            h.parentNode.insertBefore(l, h);
+        };
+        var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+                webkitRequestAnimationFrame || msRequestAnimationFrame;
+        if (raf) raf(cb);
+        else window.addEventListener('load', cb);
+    </script>
+    <script defer src="../dist/offline.min.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script defer src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script defer src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
+    <script defer src="../dist/knockout.min.js"></script>
+    <script defer src="../dist/all.min.js"></script>
+
+    </body>
 
 </html>

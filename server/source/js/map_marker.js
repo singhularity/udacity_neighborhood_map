@@ -1,14 +1,6 @@
 /**
- * Created by ssingh on 8/5/15.
+ * Provides objects for Map and Map-markers
  */
-/**
- *
- * @type {{setMap: Function, getMap: Function, getSearchService: Function, getMapCenter: Function}}
- * Represents the Map on the page
- * -- Creates a new Map
- * -- Provides a search service for the Map
- */
-
 /**
  *
  * @param propName Name of the property on which we want to filter the array
@@ -16,8 +8,9 @@
  * @returns An array of elements matching the filter
  */
 ko.observableArray.fn.filterByProperty = function(propName, matchValue) {
+    var self = this;
     return ko.pureComputed(function() {
-        var allItems = this(),
+        var allItems = self(),
             matchingItems = [];
         for (var i = 0; i < allItems.length; i++) {
             var current = allItems[i];
@@ -25,10 +18,18 @@ ko.observableArray.fn.filterByProperty = function(propName, matchValue) {
                 matchingItems.push(current);
         }
         return matchingItems;
-    }, this);
+    }, self);
 };
 
+/**
+ *
+ * @type {{setMap: Function, getMap: Function, getSearchService: Function, getMapCenter: Function}}
+ * Represents the Map on the page
+ * -- Creates a new Map
+ * -- Provides a search service for the Map
+ */
 var Map = {
+
     //Set the Map on page here
     setMap: function(valueAccessor, element) {
         var mapObj = ko.utils.unwrapObservable(valueAccessor());
@@ -68,17 +69,15 @@ var Map = {
         this.infoWindow.setContent(content);
         this.infoWindow.open(this.map, googleMarker);
     },
-    addMarkerOnMap: function(location, callback, type){
+    addMarkerOnMap: function(location, callback, type) {
         var service = this.searchService;
         var request = {
             query: location,
             type: type
         };
-        if (Offline.state == "down")
-        {
+        if (Offline.state == "down") {
             alert("No network");
-        }
-        else {
+        } else {
             service.textSearch(request, callback);
         }
     }

@@ -1,9 +1,7 @@
 /**
  * Created by ssingh on 7/29/15.
- * Provides objects for Map and Map-markers
  * Implements the operations for adding Map, Map-markers and also for searching markers.
  */
-
 /**
  *
  * @constructor
@@ -16,15 +14,23 @@
 function NeighborhoodViewModel() {
     var self = this;
 
-    var infoFunctionsMap = {
-        "City": {"google_name": "locality", func: addMarkerWithWikiInfo},
-        "Business": {"google_name": "restaurant", func: addMarkerWithYelpInfo}
-    };
-
     //Custom binding for the Map
     ko.bindingHandlers.mapBinder = {
         init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
             Map.setMap(valueAccessor, element);
+        }
+    };
+
+    // A map of functions and location types for searching Google Maps API and ....
+    // callbacks for getting info for markers
+    var infoFunctionsMap = {
+        "City": {
+            "google_name": "locality",
+            func: addMarkerWithWikiInfo
+        },
+        "Business": {
+            "google_name": "restaurant",
+            func: addMarkerWithYelpInfo
         }
     };
 
@@ -36,24 +42,25 @@ function NeighborhoodViewModel() {
     self.availableTypes = ko.observableArray(["City", "Business"]);
     self.selectedType = ko.observable();
 
-    //Add a new Marker usinf the Google Map Search Service
+    //Add a new Marker using the Google Map Search Service, needs a location type to be selected
     self.addNewMarkerOnMap = function() {
-        if (self.selectedType() === undefined)
-        {
+        if (self.selectedType() === undefined) {
             alert("Please select the type of location!");
-        }
-        else{
+        } else {
             self.addMarkerWithInfo(self.locationLat(), self.selectedType());
         }
     };
 
+    //Find an appropriate callback based on type of location and add a marker
     self.addMarkerWithInfo = function(location, type) {
         var callBackFunction = infoFunctionsMap[type].func;
         Map.addMarkerOnMap(location, callBackFunction, infoFunctionsMap[type].google_name);
     };
 
+    // A generic function for adding a marker based on text search results from google
+    // Also tracks visible markers
     function includeMarker(results, status) {
-        if(results !== undefined && results.length > 0) {
+        if (results !== undefined && results.length > 0) {
             var currentMap = Map.getMap();
             var newMarker = new Marker(results[0], currentMap);
             self.markers.push(newMarker);
@@ -61,13 +68,12 @@ function NeighborhoodViewModel() {
             self.locationLat("");
             self.selectedType("");
             return newMarker;
-        }
-        else{
+        } else {
             alert("No matching location found!");
         }
     }
 
-    //Callback that actually adds the Marker and also adds it to the list of Markers
+    //Add a marker with Wikipedia data
     function addMarkerWithWikiInfo(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var newMarker = includeMarker(results, status);
@@ -75,7 +81,7 @@ function NeighborhoodViewModel() {
         }
     }
 
-    //Callback that actually adds the Marker and also adds it to the list of Markers
+    // Add a marker with Yelp data
     function addMarkerWithYelpInfo(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var newMarker = includeMarker(results, status);

@@ -36,11 +36,11 @@ app.get('/heartbeat', function(req, res) {
     res.send();
 });
 
-app.get('/yelpData', function (req, res) {
+app.get('/yelpData', function(req, res) {
     return yelpData.getSearchData(req, res);
 });
 
-app.get('/wikiData', function (req, res) {
+app.get('/wikiData', function(req, res) {
     return wikiData.getSearchData(req, res);
 });
 
