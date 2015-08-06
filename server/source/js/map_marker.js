@@ -97,17 +97,9 @@ var Map = {
 var Marker = function(placeData, map) {
     var lat = placeData.geometry.location.lat(); // latitude from the place service
     var lon = placeData.geometry.location.lng(); // longitude from the place service
-    var title = placeData.formatted_address; // name of the place from the place service
     var self = this;
-    self.icon = {
-        url: placeData.icon,
-        size: new google.maps.Size(80, 80),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(35, 35)
-    };
-    self.title = ko.observable(title);
-    self.name = placeData.name;
+    self.name = ko.observable(placeData.name);
+    self.address = ko.observable(placeData.formatted_address);
     self.content = ko.observable("");
     self.infolink = ko.observable("");
     self.category = ko.observable("");
@@ -116,7 +108,6 @@ var Marker = function(placeData, map) {
     self.googleMarker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, lon),
         animation: google.maps.Animation.DROP,
-        icon: self.icon,
         map: map
     });
 

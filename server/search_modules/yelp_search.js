@@ -17,7 +17,8 @@ var yelp = require("yelp").createClient({
 // See http://www.yelp.com/developers/documentation/v2/search_api
 var search = function(address, res) {
     yelp.search({
-        location: address
+        location: address,
+        sort: 1
     }, function(error, data) {
         if (error === null) {
             var topChoice = data['businesses'][0];

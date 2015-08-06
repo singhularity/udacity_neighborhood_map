@@ -9,7 +9,7 @@
  *
  * Generic function to make AJax calls to the server.
  */
-function setDataFromServer(url, marker, category, callback) {
+function setDataFromServer(url, marker, category, iconUrl, callback) {
     if (Offline.state === "down") {
         alert("No network");
     } else {
@@ -19,7 +19,7 @@ function setDataFromServer(url, marker, category, callback) {
             dataType: 'json',
             timeout: 5000,
             success: function(data) {
-                callback(marker, data, category);
+                callback(marker, data, category, iconUrl);
             },
             error: function() {
                 marker.setClickEvent('Could not get additional information.');
@@ -32,16 +32,16 @@ function setDataFromServer(url, marker, category, callback) {
  *
  * @param marker Makes the Ajax call to the server to get data from Wikipedia then calls the appropriate callback
  */
-function setDataFromWikipedia(marker, category) {
-    setDataFromServer('/wikiData?name=' + marker.name, marker, category, wikipediaDataCallback);
+function setDataFromWikipedia(marker, category, iconUrl) {
+    setDataFromServer('/wikiData?name=' + marker.name(), marker, category, iconUrl, wikipediaDataCallback);
 }
 
 /**
  *
  * @param marker Makes the Ajax call to the server to get data from Yelp then calls the appropriate callback
  */
-function setDataFromYelp(marker, category) {
-    setDataFromServer('/yelpData?address=' + marker.name, marker, category, yelpDataCallback);
+function setDataFromYelp(marker, category, iconUrl) {
+    setDataFromServer('/yelpData?address=' + marker.address(), marker, category, iconUrl, yelpDataCallback);
 }
 
 /**
@@ -51,11 +51,17 @@ function setDataFromYelp(marker, category) {
  *
  * Serves as a callback function for formatting and adding data from Wikipedia
  */
-function wikipediaDataCallback(marker, data, category) {
+function wikipediaDataCallback(marker, data, category, iconUrl) {
     var content = data.content;
-    marker.setClickEvent('<div>' + content + '</div>');
-    marker.infolink("https://en.wikipedia.org/wiki/" + marker.name);
+    marker.setClickEvent('<div><h6>' + category + '</h6>' + content + '</div>');
+    marker.infolink("https://en.wikipedia.org/wiki/" + marker.name());
     marker.category(category);
+    marker.googleMarker.setIcon({
+        url: iconUrl,
+        size: new google.maps.Size(80, 80),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34)
+    });
 }
 
 /**
@@ -65,7 +71,7 @@ function wikipediaDataCallback(marker, data, category) {
  *
  * Serves as a callback function for formatting and adding data from Yelp
  */
-function yelpDataCallback(marker, data, category) {
+function yelpDataCallback(marker, data, category, iconUrl) {
     var content = data.content;
     var htmlData = "<ul></ul>";
 
@@ -74,6 +80,12 @@ function yelpDataCallback(marker, data, category) {
     marker.setClickEvent($(htmlData).html());
     marker.infolink(content.Url);
     marker.category(category);
+    marker.googleMarker.setIcon({
+        url: iconUrl,
+        size: new google.maps.Size(80, 80),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34)
+    });
 }
 
 function initializeOfflineJs() {
@@ -112,19 +124,17 @@ function initialize(neighborhood) {
 
     initializeOfflineJs();
 
-    var localities = [
-        "New York, NY", "London, UK", "Mumbai, India", "Paris, France"
-    ];
-    var businesses = ["27 W 24th St, New York, NY 10010", "4 Glen Rd, Rutherford, NJ 07070"];
+    var localities = ["New York, NY", "London, UK", "Mumbai, India"];
+    var restaurants = ["One Girl Cookies, Brooklyn", "Grimaldi's, CA"];
 
-    var landmarks = ["Grand Canyon", "Taj Mahal, India"];
+    var landmarks = ["Grand Canyon", "Taj Mahal, India", "Leaning Tower, Pisa"];
 
     for (var loc in localities) {
         neighborhood.addMarkerWithInfo(localities[loc], "City");
     }
 
-    for (var business in businesses) {
-        neighborhood.addMarkerWithInfo(businesses[business], "Business");
+    for (var restaurant in restaurants) {
+        neighborhood.addMarkerWithInfo(restaurants[restaurant], "Restaurants");
     }
 
     for (var landmark in landmarks) {

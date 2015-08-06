@@ -25,17 +25,19 @@ function NeighborhoodViewModel() {
     // callbacks for getting info for markers
     var infoFunctionsMap = {
         City: {
-            "google_name": "locality",
+            google_name: "locality",
             func: addMarkerWithCityInfo,
-            icon: ""
+            icon: "http://maps.google.com/mapfiles/marker.png"
         },
-        Business: {
-            "google_name": "restaurant",
-            func: addMarkerWithBusinessInfo
+        Restaurants: {
+            google_name: "restaurant",
+            func: addMarkerWithRestaurantInfo,
+            icon: "http://maps.google.com/mapfiles/ms/icons/restaurant.png"
         },
         Landmarks: {
-            "google_name": "point_of_interest",
-            func: addMarkerWithLandmarkInfo
+            google_name: "point_of_interest",
+            func: addMarkerWithLandmarkInfo,
+            icon: "http://maps.google.com/mapfiles/ms/icons/landmarks-jp.png"
         }
     };
 
@@ -44,7 +46,7 @@ function NeighborhoodViewModel() {
 
     self.markers = ko.observableArray();
     self.locationLat = ko.observable("");
-    self.availableTypes = ko.observableArray(["City", "Business", "Landmarks"]);
+    self.availableTypes = ko.observableArray(["City", "Restaurants", "Landmarks"]);
     self.selectedType = ko.observable();
     self.selectedFilter = ko.observable();
 
@@ -83,15 +85,15 @@ function NeighborhoodViewModel() {
     function addMarkerWithCityInfo(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var newMarker = includeMarker(results, status);
-            setDataFromWikipedia(newMarker, "City");
+            setDataFromWikipedia(newMarker, "City", infoFunctionsMap.City.icon);
         }
     }
 
     // Add a marker with Yelp data
-    function addMarkerWithBusinessInfo(results, status) {
+    function addMarkerWithRestaurantInfo(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var newMarker = includeMarker(results, status);
-            setDataFromYelp(newMarker, "Business");
+            setDataFromYelp(newMarker, "Restaurants", infoFunctionsMap.Restaurants.icon);
         }
     }
 
@@ -99,11 +101,11 @@ function NeighborhoodViewModel() {
     function addMarkerWithLandmarkInfo(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var newMarker = includeMarker(results, status);
-            setDataFromWikipedia(newMarker, "Landmarks");
+            setDataFromWikipedia(newMarker, "Landmarks", infoFunctionsMap.Landmarks.icon);
         }
     }
 
-    self.filterTypes = ko.observableArray(["All Pins", "City", "Business", "Landmarks", "None"]);
+    self.filterTypes = ko.observableArray(["All Pins", "City", "Restaurants", "Landmarks", "None"]);
     self.titleSearch = ko.observable("");
 
     self.filteredMarkers = self.markers.filterByProperty("visible", true);
@@ -119,7 +121,7 @@ function NeighborhoodViewModel() {
         self.visibleMarkersCount(0);
         for (var marker in self.markers()) {
             var markerObj = self.markers()[marker];
-            markerObj.isVisible(markerObj.title().match(text) !== null);
+            markerObj.isVisible(markerObj.name().match(text) !== null);
             if (markerObj.isVisible())
                 self.visibleMarkersCount(self.visibleMarkersCount() + 1);
         }
