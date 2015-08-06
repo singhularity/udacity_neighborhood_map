@@ -75,7 +75,11 @@ function yelpDataCallback(marker, data, category, iconUrl) {
     var content = data.content;
     var htmlData = "<ul></ul>";
 
-    htmlData = $(htmlData).html($("<li><strong>Name:&nbsp;</strong>" + content.Name + "</li><li><strong>Rating:&nbsp;</strong>" + content.Rating + "</li><li><strong>Summary/Comments:&nbsp;</strong>" + content.Summary + "</li><li><strong>Phone:&nbsp;</strong>" + content.Phone + "</li>"));
+    htmlData = $(htmlData).html($("<li><strong>Name:&nbsp;</strong>" + content.Name
+        + "</li><li><strong>Rating:&nbsp;</strong>" + content.Rating
+        + "</li><li><strong>Summary/Comments:&nbsp;</strong>" + content.Summary
+        + "</li><li><strong>Phone:&nbsp;</strong>" + content.Phone
+        + "</li>"));
 
     marker.setClickEvent($(htmlData).html());
     marker.infolink(content.Url);
