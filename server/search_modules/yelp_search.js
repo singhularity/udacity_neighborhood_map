@@ -1,10 +1,7 @@
 /**
  * Created by ssingh on 8/5/15.
  */
-//Consumer Key	bkU5fjhhuYk6O2rlD4D3kw
-//Consumer Secret	aQQQvrwNair9f6zf0P53wMXK03I
-//Token	AERZe0hs8wzP4ess1YbS7uZxfMzRrjDO
-//Token Secret	6Xp3sZxmYuAYbtTmnH5tZFvfyJU
+
 module.exports = {
     getSearchData: function(req, res) {
         return search(req.query.address, res);
