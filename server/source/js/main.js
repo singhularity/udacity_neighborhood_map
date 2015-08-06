@@ -9,7 +9,7 @@
  *
  * Generic function to make AJax calls to the server.
  */
-function setDataFromServer(url, marker, callback) {
+function setDataFromServer(url, marker, category, callback) {
     if (Offline.state === "down") {
         alert("No network");
     } else {
@@ -19,7 +19,7 @@ function setDataFromServer(url, marker, callback) {
             dataType: 'json',
             timeout: 5000,
             success: function(data) {
-                callback(marker, data);
+                callback(marker, data, category);
             },
             error: function() {
                 marker.setClickEvent('Could not get additional information.');
@@ -32,16 +32,16 @@ function setDataFromServer(url, marker, callback) {
  *
  * @param marker Makes the Ajax call to the server to get data from Wikipedia then calls the appropriate callback
  */
-function setDataFromWikipedia(marker) {
-    setDataFromServer('/wikiData?name=' + marker.name, marker, wikipediaDataCallback);
+function setDataFromWikipedia(marker, category) {
+    setDataFromServer('/wikiData?name=' + marker.name, marker, category, wikipediaDataCallback);
 }
 
 /**
  *
  * @param marker Makes the Ajax call to the server to get data from Yelp then calls the appropriate callback
  */
-function setDataFromYelp(marker) {
-    setDataFromServer('/yelpData?address=' + marker.name, marker, yelpDataCallback);
+function setDataFromYelp(marker, category) {
+    setDataFromServer('/yelpData?address=' + marker.name, marker, category, yelpDataCallback);
 }
 
 /**
@@ -51,11 +51,11 @@ function setDataFromYelp(marker) {
  *
  * Serves as a callback function for formatting and adding data from Wikipedia
  */
-function wikipediaDataCallback(marker, data) {
+function wikipediaDataCallback(marker, data, category) {
     var content = data.content;
     marker.setClickEvent('<div>' + content + '</div>');
     marker.infolink("https://en.wikipedia.org/wiki/" + marker.name);
-    marker.category("City");
+    marker.category(category);
 }
 
 /**
@@ -65,7 +65,7 @@ function wikipediaDataCallback(marker, data) {
  *
  * Serves as a callback function for formatting and adding data from Yelp
  */
-function yelpDataCallback(marker, data) {
+function yelpDataCallback(marker, data, category) {
     var content = data.content;
     var htmlData = "<ul></ul>";
 
@@ -73,7 +73,7 @@ function yelpDataCallback(marker, data) {
 
     marker.setClickEvent($(htmlData).html());
     marker.infolink(content.Url);
-    marker.category("Business");
+    marker.category(category);
 }
 
 function initializeOfflineJs() {
@@ -115,7 +115,9 @@ function initialize(neighborhood) {
     var localities = [
         "New York, NY", "London, UK", "Mumbai, India", "Paris, France"
     ];
-    var businesses = ["Rockefeller Center, New York", "Learning Tower, Pisa"];
+    var businesses = ["27 W 24th St, New York, NY 10010", "4 Glen Rd, Rutherford, NJ 07070"];
+
+    var landmarks = ["Grand Canyon", "Taj Mahal, India"];
 
     for (var loc in localities) {
         neighborhood.addMarkerWithInfo(localities[loc], "City");
@@ -123,6 +125,10 @@ function initialize(neighborhood) {
 
     for (var business in businesses) {
         neighborhood.addMarkerWithInfo(businesses[business], "Business");
+    }
+
+    for (var landmark in landmarks) {
+        neighborhood.addMarkerWithInfo(landmarks[landmark], "Landmarks");
     }
 }
 

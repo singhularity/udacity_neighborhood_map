@@ -39,7 +39,7 @@ var Map = {
 
         var options = {
             center: latLng,
-            zoom: 13
+            zoom: 5
         };
         this.map = new google.maps.Map(element, options);
 

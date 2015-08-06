@@ -24,13 +24,18 @@ function NeighborhoodViewModel() {
     // A map of functions and location types for searching Google Maps API and ....
     // callbacks for getting info for markers
     var infoFunctionsMap = {
-        "City": {
+        City: {
             "google_name": "locality",
-            func: addMarkerWithWikiInfo
+            func: addMarkerWithCityInfo,
+            icon: ""
         },
-        "Business": {
+        Business: {
             "google_name": "restaurant",
-            func: addMarkerWithYelpInfo
+            func: addMarkerWithBusinessInfo
+        },
+        Landmarks: {
+            "google_name": "point_of_interest",
+            func: addMarkerWithLandmarkInfo
         }
     };
 
@@ -39,7 +44,7 @@ function NeighborhoodViewModel() {
 
     self.markers = ko.observableArray();
     self.locationLat = ko.observable("");
-    self.availableTypes = ko.observableArray(["City", "Business"]);
+    self.availableTypes = ko.observableArray(["City", "Business", "Landmarks"]);
     self.selectedType = ko.observable();
     self.selectedFilter = ko.observable();
 
@@ -75,22 +80,30 @@ function NeighborhoodViewModel() {
     }
 
     //Add a marker with Wikipedia data
-    function addMarkerWithWikiInfo(results, status) {
+    function addMarkerWithCityInfo(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var newMarker = includeMarker(results, status);
-            setDataFromWikipedia(newMarker);
+            setDataFromWikipedia(newMarker, "City");
         }
     }
 
     // Add a marker with Yelp data
-    function addMarkerWithYelpInfo(results, status) {
+    function addMarkerWithBusinessInfo(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             var newMarker = includeMarker(results, status);
-            setDataFromYelp(newMarker);
+            setDataFromYelp(newMarker, "Business");
         }
     }
 
-    self.filterTypes = ko.observableArray(["All Pins", "City", "Business", "None"]);
+    // Add a marker with Yelp data
+    function addMarkerWithLandmarkInfo(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            var newMarker = includeMarker(results, status);
+            setDataFromWikipedia(newMarker, "Landmarks");
+        }
+    }
+
+    self.filterTypes = ko.observableArray(["All Pins", "City", "Business", "Landmarks", "None"]);
     self.titleSearch = ko.observable("");
 
     self.filteredMarkers = self.markers.filterByProperty("visible", true);
