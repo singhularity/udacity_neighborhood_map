@@ -49,11 +49,11 @@
                             </div>
                         </div>
                         <div class="mdl-navigation__link">
-                            <div class="mdl-navigation__link">
-                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="dMarkerToggle">
-                                    <input data-bind='checked: toggle' type="checkbox" id="dMarkerToggle" class="mdl-switch__input" checked />
-                                    <span class="mdl-switch__label"></span>
-                                </label>
+                            <div class="selectBox">
+                                <div class="mdl-selectfield">
+                                    <select data-bind="options: filterTypes, value: selectedFilter" class="browser-default">
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </nav>
@@ -88,10 +88,12 @@
                         </div>
                     </form>
                     <div class="mdl-navigation__link">
-                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="mMarkerToggle">
-                            <input data-bind='checked: toggle' type="checkbox" id="mMarkerToggle" class="mdl-switch__input" checked />
-                            <span class="mdl-switch__label">Toggle Markers</span>
-                        </label>
+                        <div class="selectBox">
+                            <div class="mdl-selectfield">
+                                <select data-bind="options: filterTypes, value: selectedFilter" class="browser-default">
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -200,6 +202,9 @@
     <script defer src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
     <script defer src="../dist/knockout.min.js"></script>
     <script defer src="../dist/all.min.js"></script>
+    <!--<script defer src="../dist/map_marker.js"></script>-->
+    <!--<script defer src="../dist/navview.js"></script>-->
+    <!--<script defer src="../dist/main.js"></script>-->
 
     </body>
 

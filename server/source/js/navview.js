@@ -41,6 +41,7 @@ function NeighborhoodViewModel() {
     self.locationLat = ko.observable("");
     self.availableTypes = ko.observableArray(["City", "Business"]);
     self.selectedType = ko.observable();
+    self.selectedFilter = ko.observable();
 
     //Add a new Marker using the Google Map Search Service, needs a location type to be selected
     self.addNewMarkerOnMap = function() {
@@ -89,7 +90,7 @@ function NeighborhoodViewModel() {
         }
     }
 
-    self.toggle = ko.observable(true);
+    self.filterTypes = ko.observableArray(["All Pins", "City", "Business", "None"]);
     self.titleSearch = ko.observable("");
 
     self.filteredMarkers = self.markers.filterByProperty("visible", true);
@@ -112,12 +113,14 @@ function NeighborhoodViewModel() {
     };
 
     //Toggle to control all markers at once
-    this.toggle.subscribe(function(newValue) {
-
-        if (!newValue)
-            self.markerToggler(null);
-        else
-            self.markerToggler("");
+    this.selectedFilter.subscribe(function(newValue) {
+        self.visibleMarkersCount(0);
+        for (var marker in self.markers()) {
+            var markerObj = self.markers()[marker];
+            markerObj.isVisible(markerObj.category() === newValue || newValue === "All Pins");
+            if (markerObj.isVisible())
+                self.visibleMarkersCount(self.visibleMarkersCount() + 1);
+        }
     });
 
     //Set visibility of markers based on search results

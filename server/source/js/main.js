@@ -55,6 +55,7 @@ function wikipediaDataCallback(marker, data) {
     var content = data.content;
     marker.setClickEvent('<div>' + content + '</div>');
     marker.infolink("https://en.wikipedia.org/wiki/" + marker.name);
+    marker.category("City");
 }
 
 /**
@@ -72,6 +73,7 @@ function yelpDataCallback(marker, data) {
 
     marker.setClickEvent($(htmlData).html());
     marker.infolink(content.Url);
+    marker.category("Business");
 }
 
 function initializeOfflineJs() {

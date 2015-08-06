@@ -110,6 +110,7 @@ var Marker = function(placeData, map) {
     self.name = placeData.name;
     self.content = ko.observable("");
     self.infolink = ko.observable("");
+    self.category = ko.observable("");
 
     //Create the Marker to be put on map here
     self.googleMarker = new google.maps.Marker({
