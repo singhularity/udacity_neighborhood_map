@@ -4,13 +4,14 @@ The webpage is divided into two tabs
 
 1. Tab-1 shows a Map and Markers that get added onto it.
 2. Tab-2 will show a carded representation of the Markers and the info which pops up on the Info windows.
-3. Cards also have a link which navigates to the wikipedia entry for the place that the marker represents
-4. Map Markers have InfoWindows that pull summaries from Wikipedia
+3. Cards also have a link which navigates to the Wikipedia/Yelp entry for the place that the marker represents
+4. Map Markers have InfoWindows that pull summaries from Wikipedia/Yelp
 5. Map Markers can be added with the i/p field in the navigation or the hidden drawer.
-6. Map markers will display icons that best represent the location.
-7. Map markers can be searched and filtered using the search field in the navigation bar or drawer.
-8. Map markers can be toggled on and off using a toggle in the drawer or navigation bar
+6. Map markers will display icons that best represent the location like City/Restaurant or Landmark.
+7. Map markers can be searched using the search field in the navigation bar or drawer.
+8. Map markers can be filtered using the dropdown to reveal markers of certain type only.
 9. The application detects when the user loses connectivity to show an offline message
+10. Application wont let Ajax calls go through and show an alert when offline.
 
 <b>How to run the application?</b>
 
