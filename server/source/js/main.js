@@ -10,7 +10,7 @@
  * Generic function to make AJax calls to the server.
  */
 function setDataFromServer(url, marker, callback) {
-    if (Offline.state == "down") {
+    if (Offline.state === "down") {
         alert("No network");
     } else {
         $.ajax({

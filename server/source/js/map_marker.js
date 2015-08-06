@@ -75,7 +75,7 @@ var Map = {
             query: location,
             type: type
         };
-        if (Offline.state == "down") {
+        if (Offline.state === "down") {
             alert("No network");
         } else {
             service.textSearch(request, callback);
