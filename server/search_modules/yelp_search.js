@@ -1,7 +1,6 @@
 /**
  * Created by ssingh on 8/5/15.
  */
-
 module.exports = {
     getSearchData: function(req, res) {
         return search(req.query.address, res);
@@ -27,10 +26,12 @@ var search = function(address, res) {
                     Summary: topChoice['snippet_text'],
                     Name: topChoice['name'],
                     Rating: topChoice['rating'],
-                    Url: topChoice['url']
+                    Url: topChoice['url'],
+                    Phone: topChoice['phone']
                 }
             });
-        } else
+        } else {
             res.send("");
+        }
     });
 };

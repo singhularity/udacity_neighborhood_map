@@ -53,7 +53,7 @@ function setDataFromYelp(marker) {
  */
 function wikipediaDataCallback(marker, data) {
     var content = data.content;
-    marker.setClickEvent(content);
+    marker.setClickEvent('<div>' + content + '</div>');
     marker.infolink("https://en.wikipedia.org/wiki/" + marker.name);
 }
 
@@ -66,13 +66,12 @@ function wikipediaDataCallback(marker, data) {
  */
 function yelpDataCallback(marker, data) {
     var content = data.content;
-    try {
-        content = "<ul><li id='summary'>" + content.Name + "</li></ul>";
-    } catch (error) {
-        content = 'Could not get additional information.';
-    }
-    marker.setClickEvent(content);
-    marker.infolink(data.url);
+    var htmlData = "<ul></ul>";
+
+    htmlData = $(htmlData).html($("<li><strong>Name:&nbsp;</strong>" + content.Name + "</li><li><strong>Rating:&nbsp;</strong>" + content.Rating + "</li><li><strong>Summary/Comments:&nbsp;</strong>" + content.Summary + "</li><li><strong>Phone:&nbsp;</strong>" + content.Phone + "</li>"));
+
+    marker.setClickEvent($(htmlData).html());
+    marker.infolink(content.Url);
 }
 
 function initializeOfflineJs() {
